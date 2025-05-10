@@ -1,0 +1,12 @@
+DotLottieAnimation(
+    width = 500u,
+    height = 500u,
+    source = DotLottieSource.Url("<https://lottiefiles-mobile-templates.s3.amazonaws.com/ar-stickers/swag_sticker_piggy.lottie>"), // URL of .json or .lottie
+    // source = DotLottieSource.Asset("file.json"),
+    autoplay = true,
+    loop = true,
+    speed = 3f,
+    useFrameInterpolation = false,
+    playMode = Mode.Forward,
+    modifier = Modifier.background(Color.LIGHT_GRAY)
+)
