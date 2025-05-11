@@ -127,4 +127,8 @@ dependencies {
     implementation("io.michaelrocks:libphonenumber-android:8.13.27")
 
 
+    implementation("com.patrykandpatrick.vico:compose:2.1.2") // Use latest version
+    implementation("com.patrykandpatrick.vico:core:2.1.2")
+    implementation("com.patrykandpatrick.vico:views:2.1.2") // Only if you use View system
+
 }
