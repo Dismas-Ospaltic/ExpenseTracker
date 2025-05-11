@@ -18,6 +18,7 @@ import com.st11.expensetracker.screens.SelectCurrencyScreen
 import com.st11.expensetracker.screens.SettingScreen
 import com.st11.expensetracker.screens.WishlistScreen
 import com.st11.expensetracker.screens.SplashScreen
+import com.st11.expensetracker.viewmodel.CurrencyViewModel
 import com.st11.expensetracker.viewmodel.OnboardingViewModel
 import org.koin.androidx.compose.getViewModel
 
@@ -47,6 +48,9 @@ fun AppNavHost(navController: NavHostController, modifier: Modifier) {
     val isOnboardingCompleted by mainViewModel.isOnboardingCompleted.collectAsState(initial = false)
 
 
+    val currencyViewModel: CurrencyViewModel = getViewModel()
+    val isCurrencySet by currencyViewModel.isCurrencySet.collectAsState(initial = false)
+
     AnimatedNavHost(
         navController,
         startDestination = Screen.Splash.route,
@@ -68,11 +72,27 @@ fun AppNavHost(navController: NavHostController, modifier: Modifier) {
 //            DetailScreen(navController, itemId)
 //        }
 
+        composable(Screen.SelectCurrency.route) {
+            LaunchedEffect(isCurrencySet) {
+                if (isCurrencySet) {
+                    navController.navigate(Screen.Home.route) {
+                        popUpTo(Screen.SelectCurrency.route) { inclusive = true }
+                    }
+                }
+            }
+
+            // Always show CreateIdentityScreen unless already created
+            SelectCurrencyScreen(navController)
+        }
+
+
+
+
         composable(Screen.Splash.route) {
             SplashScreen(
                 onNavigate = {
                     when {
-                        isOnboardingCompleted -> navController.navigate(Screen.Home.route) {
+                        isOnboardingCompleted -> navController.navigate(Screen.SelectCurrency.route) {
                             popUpTo(Screen.Splash.route) { inclusive = true }
                         }
 
@@ -88,7 +108,7 @@ fun AppNavHost(navController: NavHostController, modifier: Modifier) {
 
         composable(Screen.Onboarding.route) {  OnboardingScreen( onCompleteOnboarding = {
             mainViewModel.completeOnboarding()
-            navController.navigate(Screen.Home.route) {
+            navController.navigate(Screen.SelectCurrency.route) {
                 popUpTo(Screen.Onboarding.route) { inclusive = true }
 
             }

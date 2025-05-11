@@ -40,9 +40,11 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.core.content.ContextCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.st11.expensetracker.R
 import com.st11.expensetracker.screens.components.ExpensePopup
 import com.st11.expensetracker.utils.DynamicStatusBar
+import com.st11.expensetracker.viewmodel.MainViewModel
 import compose.icons.FontAwesomeIcons
 import compose.icons.fontawesomeicons.Regular
 import compose.icons.fontawesomeicons.Solid
@@ -59,6 +61,12 @@ fun HomeScreen(navController: NavController) {
 
     val backgroundColor = colorResource(id = R.color.light_green)
     DynamicStatusBar(backgroundColor)
+
+     val viewModel: MainViewModel = koinViewModel()
+    // Example: Schedule reminder on first launch or after login
+    LaunchedEffect(Unit) {
+        viewModel.startReminderWorker()
+    }
 
     val searchQuery = remember { mutableStateOf("") }
 

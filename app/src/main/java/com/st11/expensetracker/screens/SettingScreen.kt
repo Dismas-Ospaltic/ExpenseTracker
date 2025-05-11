@@ -113,13 +113,13 @@ fun SettingScreen(navController: NavController) {
                     }
                 )
                 HorizontalDivider()
-                SettingsItem(
-                    icon = FontAwesomeIcons.Solid.DollarSign,
-                    title = "Currency",
-                    onClick = { /*  */  navController.navigate("selectCurrency")  },
-                    iconTint = Color.Red,
-                    textColor = Color.Red
-                )
+//                SettingsItem(
+//                    icon = FontAwesomeIcons.Solid.DollarSign,
+//                    title = "Currency",
+//                    onClick = { /*  */  navController.navigate("selectCurrency")  },
+//                    iconTint = Color.Red,
+//                    textColor = Color.Red
+//                )
             }
 
 
