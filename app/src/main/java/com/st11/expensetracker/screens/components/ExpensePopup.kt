@@ -19,6 +19,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MenuAnchorType
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
@@ -44,6 +45,8 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.st11.expensetracker.R
+import com.st11.expensetracker.model.ExpenseEntity
+import com.st11.expensetracker.viewmodel.ExpenseViewModel
 import io.michaelrocks.libphonenumber.android.PhoneNumberUtil
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -66,6 +69,7 @@ fun ExpensePopup(onDismiss: () -> Unit) {
     val backgroundColor = colorResource(id = R.color.light_green)
     val context = LocalContext.current
 
+    val expenseViewModel: ExpenseViewModel = koinViewModel()
 
     // Category types
     val categoryType = listOf(
@@ -192,7 +196,10 @@ fun ExpensePopup(onDismiss: () -> Unit) {
                         readOnly = true,
                         label = { Text("payment Method") },
                         modifier = Modifier
-                            .menuAnchor()
+                            .menuAnchor(
+                                type = MenuAnchorType.PrimaryEditable,
+                                enabled = true
+                            )
                             .fillMaxWidth(),
                         trailingIcon = {
                             ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded02)
@@ -226,14 +233,23 @@ fun ExpensePopup(onDismiss: () -> Unit) {
                 }
 
 
-
             }
         },
         confirmButton = {
 
             TextButton(onClick = { /* Handle submission */
                 if (amount.isNotBlank() && expenseDescription.isNotBlank() && category.isNotBlank() && paymentMethod.isNotBlank()) {
-
+                    CoroutineScope(Dispatchers.Main).launch {
+                        expenseViewModel.insertExpense(
+                            ExpenseEntity(
+                                expenseId = generateSixDigitRandomNumber().toString(),
+                                expenseAmount = amount.toFloat(),
+                                expenseCategory = category,
+                                expenseDescription = expenseDescription,
+                                paymentMode = paymentMethod
+                            )
+                        )
+                    }
                     onDismiss()
                 }else{
                     Toast.makeText(context, "All fields are required", Toast.LENGTH_LONG).show()

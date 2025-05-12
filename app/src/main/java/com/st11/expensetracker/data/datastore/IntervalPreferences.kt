@@ -13,11 +13,11 @@ private val Context.userDataStore: DataStore<Preferences> by preferencesDataStor
 class IntervalPreferences(private val context: Context) {
 
     companion object {
-        val TIME_INTERVAL = floatPreferencesKey("user_time_interval") // ✅ Use correct type key
+        val TIME_INTERVAL = longPreferencesKey("user_time_interval") // ✅ Use correct type key
     }
 
     // Save user time interval
-    suspend fun saveUserData(userTimeInterval: Float) {
+    suspend fun saveUserData(userTimeInterval: Long) {
         context.userDataStore.edit { preferences ->
             preferences[TIME_INTERVAL] = userTimeInterval
         }
@@ -26,7 +26,7 @@ class IntervalPreferences(private val context: Context) {
     // Observe user time interval
     val userTimeData: Flow<UserTimeData> = context.userDataStore.data.map { preferences ->
         UserTimeData(
-            userTimeInterval = preferences[TIME_INTERVAL] ?: 3f // ✅ Constructor call fixed
+            userTimeInterval = preferences[TIME_INTERVAL] ?: 1L // ✅ Constructor call fixed
         )
     }
 
@@ -40,5 +40,5 @@ class IntervalPreferences(private val context: Context) {
 
 // ✅ Correct name used throughout
 data class UserTimeData(
-    val userTimeInterval: Float
+    val userTimeInterval: Long
 )

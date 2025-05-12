@@ -6,6 +6,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
+import com.st11.expensetracker.model.DailyExpenseTotal
 import com.st11.expensetracker.model.ExpenseEntity
 import kotlinx.coroutines.flow.Flow
 
@@ -25,6 +26,15 @@ interface ExpenseDao {
 
     @Query("SELECT SUM(expenseAmount) FROM expenses")
     fun getAllTotalExpense(): Flow<Float?>
+
+    @Query("SELECT expenseDate, SUM(expenseAmount) as totalAmount FROM expenses GROUP BY expenseDate ORDER BY expenseDate DESC")
+    fun getDailyTotalExpenses(): Flow<List<DailyExpenseTotal>>
+
+
+    @Query("SELECT SUM(expenseAmount) FROM expenses WHERE expenseDate LIKE :month || '%'")
+    fun getMonthlyTotalExpense(month: String): Flow<Float?>
+
+
 
 
 }

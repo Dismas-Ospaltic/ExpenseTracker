@@ -2,6 +2,7 @@ package com.st11.expensetracker.repository
 
 
 import com.st11.expensetracker.data.local.ExpenseDao
+import com.st11.expensetracker.model.DailyExpenseTotal
 import com.st11.expensetracker.model.ExpenseEntity
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -27,12 +28,22 @@ class ExpenseRepository(private val expenseDao: ExpenseDao) {
             .map { total -> total ?: 0.0f }  // Convert NULL to 0.0
     }
 
+    fun getMonthlyTotalExpense(month: String): Flow<Float> {
+        return expenseDao.getMonthlyTotalExpense(month)
+            .map { total -> total ?: 0.0f }  // Convert NULL to 0.0
+    }
+
+
+
+
 //    fun getAllTotalPaidDebt(): Flow<Int> {
 //        return debtDao.getAllTotalPaidDebt()
 //            .map { total -> total ?: 0 }  // Convert NULL to 0.0
 //    }
 
-
+    fun getDailyTotalExpenses(): Flow<List<DailyExpenseTotal>> {
+        return expenseDao.getDailyTotalExpenses()
+    }
 
 
 

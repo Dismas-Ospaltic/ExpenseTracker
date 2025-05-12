@@ -15,7 +15,7 @@ class MainViewModel(
     private val reminderScheduler: ReminderScheduler
 ) : AndroidViewModel(application) {
 
-    fun startReminderWorker(hours: Long = (3/60)) {
+    fun startReminderWorker(hours: Long) {
         reminderScheduler.scheduleReminder(getApplication(), hours)
     }
 }

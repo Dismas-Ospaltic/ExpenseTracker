@@ -16,7 +16,7 @@ class WishlistViewModel(private val wishlistRepository: WishlistRepository) : Vi
 
     // Holds the list of wishlist
     private val _wishs = MutableStateFlow<List<WishlistEntity>>(emptyList())
-    val debts: StateFlow<List<WishlistEntity>> = _wishs
+    val wishs: StateFlow<List<WishlistEntity>> = _wishs
 
 //    // Holds the list of debt Ids for a specific user
 //    private val _debtsId = MutableStateFlow<List<DebtEntity>>(emptyList())
@@ -25,7 +25,9 @@ class WishlistViewModel(private val wishlistRepository: WishlistRepository) : Vi
 //    private val _debtsId = MutableStateFlow<List<String>>(emptyList())
 //    val debtsId: StateFlow<List<String>> = _debtsId
 
-
+  init {
+      getAllWishlist()
+  }
 
 
 
@@ -36,7 +38,7 @@ class WishlistViewModel(private val wishlistRepository: WishlistRepository) : Vi
     /**
      * Fetch all wishes
      */
-    fun getAllWishlist() {
+    private fun getAllWishlist() {
         viewModelScope.launch {
             wishlistRepository.getAllWishlist().collectLatest { debtList ->
                 _wishs.value = debtList

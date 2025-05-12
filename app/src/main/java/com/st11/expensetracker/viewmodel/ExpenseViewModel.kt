@@ -6,11 +6,14 @@ package com.st11.expensetracker.viewmodel
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.st11.expensetracker.model.DailyExpenseTotal
 import com.st11.expensetracker.model.ExpenseEntity
 import com.st11.expensetracker.repository.ExpenseRepository
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 class ExpenseViewModel(private val expenseRepository: ExpenseRepository) : ViewModel() {
@@ -23,7 +26,9 @@ class ExpenseViewModel(private val expenseRepository: ExpenseRepository) : ViewM
 //    private val _debtsId = MutableStateFlow<List<DebtEntity>>(emptyList())
 //    val debtsId: StateFlow<List<DebtEntity>> = _debtsId
 
-
+init {
+    getAllExpenses()
+}
 
 
 //    // Holds a single debt item amount Rem
@@ -33,7 +38,7 @@ class ExpenseViewModel(private val expenseRepository: ExpenseRepository) : ViewM
     /**
      * Fetch all debts for a specific user
      */
-    fun getAllExpenses() {
+    private fun getAllExpenses() {
         viewModelScope.launch {
             expenseRepository.getAllExpenses().collectLatest { expenseList ->
                 _expenses.value = expenseList
@@ -98,6 +103,21 @@ class ExpenseViewModel(private val expenseRepository: ExpenseRepository) : ViewM
         }
     }
 
+    private val _totalMonthExpense = MutableStateFlow(0.0f)
+    val totalMonthExpense: StateFlow<Float> = _totalMonthExpense
 
+    fun getMonthlyTotalExpense(month: String) {
+        viewModelScope.launch {
+            expenseRepository.getMonthlyTotalExpense(month).collectLatest { total ->
+                _totalMonthExpense.value = total
+            }
+        }
+    }
+
+
+
+    val dailyExpenseTotals: StateFlow<List<DailyExpenseTotal>> =
+        expenseRepository.getDailyTotalExpenses()
+            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
 }

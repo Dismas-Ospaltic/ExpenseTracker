@@ -9,7 +9,7 @@ import com.st11.expensetracker.utils.formatDate
 data class ExpenseEntity(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val expenseDate: String = formatDate(System.currentTimeMillis()), //DD-MM-YYYY
-    val expenseAmount: Double,
+    val expenseAmount: Float,
     val expenseCategory: String,
     val expenseDescription: String,
     val paymentMode: String,

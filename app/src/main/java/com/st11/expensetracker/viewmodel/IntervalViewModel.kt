@@ -20,11 +20,11 @@ class IntervalViewModel(
             .stateIn(
                 scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(5000),
-                initialValue = UserTimeData(3f)
+                initialValue = UserTimeData(1L)
             )
 
     // Save time interval (e.g., from user settings)
-    fun saveTimeInterval(interval: Float) {
+    fun saveTimeInterval(interval: Long) {
         viewModelScope.launch {
             intervalPreferences.saveUserData(interval)
         }

@@ -42,6 +42,9 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import com.st11.expensetracker.R
 import com.st11.expensetracker.utils.DynamicStatusBar
+import com.st11.expensetracker.utils.formatDateToReadable
+import com.st11.expensetracker.viewmodel.CurrencyViewModel
+import com.st11.expensetracker.viewmodel.WishlistViewModel
 import compose.icons.FontAwesomeIcons
 import compose.icons.fontawesomeicons.Regular
 import compose.icons.fontawesomeicons.Solid
@@ -61,8 +64,20 @@ fun WishlistScreen(navController: NavController) {
 
     val searchQuery = remember { mutableStateOf("") }
 
+    val wishlistViewModel: WishlistViewModel = koinViewModel()
+    val wishlist by wishlistViewModel.wishs.collectAsState()
+
+    val currencyViewModel: CurrencyViewModel = koinViewModel()
+    val currency by currencyViewModel.userData.collectAsState()
 
 
+
+    // ✅ **Filter the list based on search query**
+    val filteredWishlist = wishlist.filter {
+        it.itemName.contains(searchQuery.value, ignoreCase = true) ||
+                it.priority.contains(searchQuery.value, ignoreCase = true) ||
+                it.wishDescription.contains(searchQuery.value, ignoreCase = true)
+    }
 
 
     Scaffold(
@@ -127,7 +142,8 @@ fun WishlistScreen(navController: NavController) {
 
             Spacer(modifier = Modifier.height(16.dp))
 
-
+            // ✅ Show "No Data Available" if the list is empty initially or after filtering
+            if (wishlist.isEmpty()) {
             // No data available at the initial display
             Box(
                 modifier = Modifier.fillMaxSize(),
@@ -139,10 +155,12 @@ fun WishlistScreen(navController: NavController) {
                     fontWeight = FontWeight.Bold,
                     color = Color.Gray
                 )
+            }
+        }
 
                 // No data available after search
 
-
+        else if (filteredWishlist.isEmpty()){
                 // No data available after search
                 Box(
                     modifier = Modifier.fillMaxSize(),
@@ -154,52 +172,63 @@ fun WishlistScreen(navController: NavController) {
                         fontWeight = FontWeight.Bold,
                         color = Color.Gray
                     )
+                }
+            }else {
 
 
-                    repeat(10) { index ->
+//                repeat(10) { index ->
 //                items(filteredPeople) { index, person ->
+                for (index in filteredWishlist.indices) {
+                    Card(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(8.dp)
+                            .clickable {
 
-                        Card(
+                            },
+                        shape = RoundedCornerShape(12.dp),
+                        colors = CardDefaults.cardColors(containerColor = Color.White)
+                    ) {
+                        Text(
+                            text = "Target Date: " + formatDateToReadable(wishlist[index].targetDate),
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 12.sp,
+                            modifier = Modifier.align(Alignment.End)
+                                .padding(8.dp),
+                            color = colorResource(id = R.color.light_green)
+                        )
+                        Text(
+                            text = "Status: ${wishlist[index].wishStatus}", modifier = Modifier.align(Alignment.End)
+                                .padding(end = 8.dp)
+                        )
+                        Row(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(8.dp)
-                                .clickable {
-
-                                },
-                            shape = RoundedCornerShape(12.dp),
-                            colors = CardDefaults.cardColors(containerColor = Color.White)
+                                .padding(16.dp),
+                            verticalAlignment = Alignment.CenterVertically
                         ) {
-                            Text(text = "Target Date: may 10 2025", fontWeight = FontWeight.Bold, fontSize = 12.sp,
-                                modifier = Modifier.align(Alignment.End)
-                                    .padding(8.dp)
-                                ,
-                                color = colorResource(id = R.color.light_green)
-                            )
-                            Text(text = "Status: not purchased",  modifier = Modifier.align(Alignment.End)
-                                .padding(end = 8.dp))
-                            Row(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(16.dp),
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                Column(modifier = Modifier.weight(1f)) {
-                                    Text(text = "priority: high" , fontSize = 12.sp, color = colorResource(id = R.color.light_green))
-                                    Text(text = "Item Name: bluetooth speaker")
-                                    Text(text = "Estimated Price: Kes 3000")
-                                    Text(text = "Description: hifi sound system black")
-                                    Text(text = "notes: hifi sound system black")
-                                }
+                            Column(modifier = Modifier.weight(1f)) {
+                                Text(
+                                    text = "priority: ${wishlist[index].priority}",
+                                    fontSize = 12.sp,
+                                    color = colorResource(id = R.color.light_green)
+                                )
+                                Text(text = "Item Name: ${wishlist[index].itemName}")
+                                Text(text = "Estimated Price: ${currency.userCurrency} ${wishlist[index].estimateAmount}")
+                                Text(text = "Description: ${wishlist[index].wishDescription}")
+                                Text(text = "Notes: ${wishlist[index].wishNote.ifBlank { "No note added" }}")
                             }
                         }
                     }
+                }
+            }
                 }
 
             }
 
         }
-    }
-}
+
+
 
 
 @Preview(showBackground = true)

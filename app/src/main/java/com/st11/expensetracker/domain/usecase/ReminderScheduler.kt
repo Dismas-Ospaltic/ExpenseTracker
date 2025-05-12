@@ -7,7 +7,7 @@ import com.st11.expensetracker.data.worker.ReminderWorker
 import java.util.concurrent.TimeUnit
 
 object ReminderScheduler {
-    fun scheduleReminder(context: Context, hours: Long = (3/60)) {
+    fun scheduleReminder(context: Context, hours: Long) {
         val workRequest = PeriodicWorkRequestBuilder<ReminderWorker>(hours, TimeUnit.HOURS)
             .build()
 

@@ -42,8 +42,13 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.st11.expensetracker.R
+import com.st11.expensetracker.data.datastore.UserTimeData
 import com.st11.expensetracker.screens.components.ExpensePopup
 import com.st11.expensetracker.utils.DynamicStatusBar
+import com.st11.expensetracker.utils.formatDateToReadable
+import com.st11.expensetracker.viewmodel.CurrencyViewModel
+import com.st11.expensetracker.viewmodel.ExpenseViewModel
+import com.st11.expensetracker.viewmodel.IntervalViewModel
 import com.st11.expensetracker.viewmodel.MainViewModel
 import compose.icons.FontAwesomeIcons
 import compose.icons.fontawesomeicons.Regular
@@ -64,14 +69,39 @@ fun HomeScreen(navController: NavController) {
 
      val viewModel: MainViewModel = koinViewModel()
     // Example: Schedule reminder on first launch or after login
+
+    val intervalViewModel: IntervalViewModel = koinViewModel()
+//    val interval by intervalViewModel.userTimeInterval.collectAsState(initial = 1L)
+
+    val intervalData by intervalViewModel.userTimeInterval.collectAsState(
+        initial = UserTimeData(userTimeInterval = 1L) //LATER CHANGE TO 1L
+    )
+    val interval = intervalData.userTimeInterval
+
     LaunchedEffect(Unit) {
-        viewModel.startReminderWorker()
+
+        viewModel.startReminderWorker(interval)
+
     }
 
     val searchQuery = remember { mutableStateOf("") }
 
+    val expenseViewModel: ExpenseViewModel = koinViewModel()
+    val expenses by expenseViewModel.debts.collectAsState()
+
+   val currencyViewModel: CurrencyViewModel = koinViewModel()
+    val currency by currencyViewModel.userData.collectAsState()
+
+//    val createIdentityViewModel: CreateIdentityViewModel = getViewModel()
+//    val userData by createIdentityViewModel.userData.collectAsState()
 
 
+    // ✅ **Filter the list based on search query**
+    val filteredExpenses = expenses.filter {
+        it.expenseDescription.contains(searchQuery.value, ignoreCase = true) ||
+                it.expenseDate.contains(searchQuery.value, ignoreCase = true) ||
+                it.expenseCategory.contains(searchQuery.value, ignoreCase = true)
+    }
 
 
     Scaffold(
@@ -137,6 +167,8 @@ fun HomeScreen(navController: NavController) {
             Spacer(modifier = Modifier.height(16.dp))
 
 
+            // ✅ Show "No Data Available" if the list is empty initially or after filtering
+            if (expenses.isEmpty()) {
             // No data available at the initial display
             Box(
                 modifier = Modifier.fillMaxSize(),
@@ -151,7 +183,8 @@ fun HomeScreen(navController: NavController) {
 
                 // No data available after search
 
-
+       }
+                }else if (filteredExpenses.isEmpty()){
                 // No data available after search
                 Box(
                     modifier = Modifier.fillMaxSize(),
@@ -163,11 +196,14 @@ fun HomeScreen(navController: NavController) {
                         fontWeight = FontWeight.Bold,
                         color = Color.Gray
                     )
+                }
+                }else{
 
 
-                    repeat(10) { index ->
+
+//                    repeat(10) { index ->
 //                items(filteredPeople) { index, person ->
-
+                for (index in filteredExpenses.indices) {
                         Card(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -178,10 +214,17 @@ fun HomeScreen(navController: NavController) {
                             shape = RoundedCornerShape(12.dp),
                             colors = CardDefaults.cardColors(containerColor = Color.White)
                         ) {
-                            Text(text = "Kes 200", fontWeight = FontWeight.Bold, fontSize = 24.sp,
+                            Text(text = "${currency.userCurrency} ${expenses[index].expenseAmount}", fontWeight = FontWeight.Bold, fontSize = 24.sp,
                                 modifier = Modifier.align(Alignment.End)
                                     .padding(8.dp)
                             ,
+                                color = colorResource(id = R.color.light_green)
+                            )
+                            Spacer(modifier = Modifier.height(4.dp))
+                            Text(text = expenses[index].expenseCategory, fontWeight = FontWeight.Bold, fontSize = 12.sp,
+                                modifier = Modifier.align(Alignment.End)
+                                    .padding(end = 8.dp)
+                                ,
                                 color = colorResource(id = R.color.light_green)
                             )
                             Row(
@@ -191,13 +234,14 @@ fun HomeScreen(navController: NavController) {
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
                                 Column(modifier = Modifier.weight(1f)) {
-                                    Text(text = "${index + 1}.")
-                                    Text(text = "Lunch at kfc", color = colorResource(id= R.color.gray01))
-                                    Text(text = "may 10 2025")
+                                    Text(text = expenses[index].expenseDescription, color = colorResource(id= R.color.gray01))
+                                    formatDateToReadable(expenses[index].expenseDate)?.let { Text(text = it) }
+                                    Text(text = "payment mode: " + expenses[index].paymentMode, color = colorResource(id= R.color.dark))
                                 }
                             }
                         }
                     }
+
                 }
 
             }
@@ -207,7 +251,7 @@ fun HomeScreen(navController: NavController) {
 
 
 
-}
+
 
 
 @Preview(showBackground = true)

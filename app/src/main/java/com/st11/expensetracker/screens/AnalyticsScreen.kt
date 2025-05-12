@@ -1,29 +1,15 @@
 package com.st11.expensetracker.screens
 
-import android.Manifest
-import android.app.Activity
-import android.content.Intent
-import android.content.pm.PackageManager
-import android.widget.Toast
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.detectTapGestures
-import androidx.compose.foundation.hoverable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -31,8 +17,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -41,28 +25,19 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import androidx.compose.ui.platform.LocalDensity
-import androidx.core.content.ContextCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.WindowInsetsControllerCompat
 import com.st11.expensetracker.R
 import com.st11.expensetracker.utils.DynamicStatusBar
+import com.st11.expensetracker.viewmodel.CurrencyViewModel
+import com.st11.expensetracker.viewmodel.ExpenseViewModel
+import com.st11.expensetracker.viewmodel.WishlistViewModel
 import compose.icons.FontAwesomeIcons
-import compose.icons.fontawesomeicons.Regular
 import compose.icons.fontawesomeicons.Solid
 import compose.icons.fontawesomeicons.solid.ArrowLeft
 import compose.icons.fontawesomeicons.solid.ArrowRight
-import compose.icons.fontawesomeicons.solid.MoneyCheck
-import compose.icons.fontawesomeicons.solid.Search
-import compose.icons.fontawesomeicons.solid.Users
-import org.koin.androidx.compose.getViewModel
 import org.koin.androidx.compose.koinViewModel
 import java.time.YearMonth
 import java.time.format.TextStyle
 import java.util.Locale
-import kotlin.random.Random
-
-
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -74,31 +49,68 @@ fun AnalyticsScreen(navController: NavController) {
 
     val searchQuery = remember { mutableStateOf("") }
 
+    val expenseViewModel: ExpenseViewModel = koinViewModel()
+    val dailyExpenseTotals by expenseViewModel.dailyExpenseTotals.collectAsState()
+
+    val currencyViewModel: CurrencyViewModel = koinViewModel()
+    val currency by currencyViewModel.userData.collectAsState()
+
+    val totalExpense by expenseViewModel.totalExpense.collectAsState(initial = 0.0f)
+    val totalMonthExpense by expenseViewModel.totalMonthExpense.collectAsState(initial = 0.0f)
+
+    val wishlistViewModel: WishlistViewModel = koinViewModel()
+    val wishlistTotal by wishlistViewModel.totalWishlistAmount.collectAsState(initial = 0.0f)
+    val totalNoWishlist by wishlistViewModel.totalNoWishlist.collectAsState(initial = 0)
+
+
+
+    val currentYearMonth = YearMonth.now().toString() // "2025-05"
+//    val totalForThisMonth = expenseDao.getMonthlyTotalExpense(currentYearMonth)
+
+    // 🔍 Debug with LaunchedEffect
+    LaunchedEffect(Unit) {
+        expenseViewModel.getAllTotalExpense()
+        expenseViewModel.getMonthlyTotalExpense(currentYearMonth)
+        wishlistViewModel.getAllTotalWishlistAmount()
+        wishlistViewModel.getAllTotalWishlist()
+    }
+
+
 
     val cardData = listOf(
-        CardInfo("Total Spend", "KES 8,000", R.drawable.expenses),
-        CardInfo("total Expenses This Month", "KES 390", R.drawable.moneybag),
-        CardInfo("Total Wishlist", "KES 12,000", R.drawable.wishlist),
-        CardInfo("Saved", "KES 4,000", R.drawable.budget01),
+        CardInfo("Total Spend", "${currency.userCurrency} $totalExpense", R.drawable.expenses),
+        CardInfo("total Expenses This Month", "${currency.userCurrency} $totalMonthExpense", R.drawable.moneybag),
+        CardInfo("Total Wishlist", "${currency.userCurrency} $wishlistTotal", R.drawable.wishlist),
+        CardInfo("Wishlist No.", "$totalNoWishlist", R.drawable.wishlist),
     )
-
-
-
-
 
 
 
 
     val currentMonth = remember { mutableStateOf(YearMonth.now()) }
 
-    val allData = remember {
-        // Replace this with actual data from DB or API
-        mapOf(
-            YearMonth.of(2025, 5) to List(31) { (it + 1).toString() to Random.nextFloat() * 100 },
-            YearMonth.of(2025, 4) to List(30) { (it + 1).toString() to Random.nextFloat() * 100 },
-            YearMonth.of(2025, 3) to List(31) { (it + 1).toString() to Random.nextFloat() * 100 }
-        )
+
+    val allData = remember(dailyExpenseTotals) {
+        dailyExpenseTotals
+            .mapNotNull { item ->
+                try {
+                    val parts = item.expenseDate.split("-") // expecting format "YYYY-MM-dd"
+                    val year = parts[0].toInt()
+                    val month = parts[1].toInt()
+                    val day = parts[2].padStart(2, '0')
+                    Triple(YearMonth.of(year, month), day, item.totalAmount)
+                } catch (e: Exception) {
+                    null // Skip invalid date
+                }
+            }
+            .groupBy { it.first } // group by YearMonth
+            .mapValues { (_, values) ->
+                values.map { it.second to it.third } // List<Pair<String, Float>>
+            }
     }
+
+
+
 
     val daysInMonth = currentMonth.value.lengthOfMonth()
     val expenseData = allData[currentMonth.value] ?: List(daysInMonth) { (it + 1).toString() to 0f }
@@ -106,6 +118,9 @@ fun AnalyticsScreen(navController: NavController) {
 
     val maxAmount = expenseData.maxOfOrNull { it.second } ?: 1f
     val chartHeight = 150.dp // total height allocated for bars
+
+
+
 
 
     Scaffold(
@@ -412,7 +427,7 @@ fun AnalyticsScreen(navController: NavController) {
                         ) {
 
                             Text(
-                                text = "Ksh ${amount.toInt().toString()}",
+                                text = "${currency.userCurrency} ${amount.toInt()}",
                                 fontSize = 10.sp,
                                 modifier = Modifier.graphicsLayer {
                                     rotationZ = -80f // Rotate counter-clockwise

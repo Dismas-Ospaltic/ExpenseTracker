@@ -39,6 +39,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import com.st11.expensetracker.R
 import com.st11.expensetracker.utils.DynamicStatusBar
+import com.st11.expensetracker.viewmodel.IntervalViewModel
 import compose.icons.FontAwesomeIcons
 import compose.icons.fontawesomeicons.Solid
 import compose.icons.fontawesomeicons.solid.Calendar
@@ -61,15 +62,18 @@ fun NotificationPreferenceScreen(navController: NavController) {
     val backgroundColor = colorResource(id = R.color.light_green)
     DynamicStatusBar(backgroundColor)  // ✅ Apply dynamic status bar settings
 
+    val intervalViewModel: IntervalViewModel = koinViewModel()
+
     val intervals = listOf(
-        "45 mins" to 45 * 60 * 1000L,
-        "1 hr" to 60 * 60 * 1000L,
-        "6 hrs" to 6 * 60 * 60 * 1000L
+        "1 hr" to 1L,
+        "6 hr" to 6L,
+        "8 hrs" to 8L
+
     )
 
     var selectedIntervalLabel by remember { mutableStateOf(intervals[0].first) }
-    val selectedIntervalMillis = intervals.first { it.first == selectedIntervalLabel }.second
-
+    // Retrieve the selected interval in hours (Long)
+    val selectedIntervalHours = intervals.first { it.first == selectedIntervalLabel }.second
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
@@ -133,8 +137,8 @@ fun NotificationPreferenceScreen(navController: NavController) {
 
             Button(
                 onClick = {
-                    // TODO: Save `selectedIntervalMillis` to preferences
-                    Log.d("Selected", "$selectedIntervalLabel = $selectedIntervalMillis ms")
+                    //save to preferences
+                    intervalViewModel.saveTimeInterval(selectedIntervalHours)
                     navController.popBackStack()
                 },
                 colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.green)),

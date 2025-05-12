@@ -9,7 +9,8 @@ import com.st11.expensetracker.utils.formatDate
 data class WishlistEntity(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val wishlistDate: String = formatDate(System.currentTimeMillis()), //DD-MM-YYYY
-    val estimateAmount: Double,
+    val itemName: String,
+    val estimateAmount: Float,
     val targetDate: String,
     val wishDescription: String,
     val wishNote: String = null.toString(),
