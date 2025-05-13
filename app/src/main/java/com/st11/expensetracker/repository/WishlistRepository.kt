@@ -34,8 +34,8 @@ class WishlistRepository(private val wishDao: WishDao) {
 
 
 
-    suspend fun updateWishStatus(wishId: String, newStatus: String): Boolean {
-        val rowsUpdated = wishDao.updateWishStatus(wishId, newStatus) ?: 0
+    suspend fun updateWishStatus(wishId: String, newStatus: String, itemPurchaseDate: String): Boolean {
+        val rowsUpdated = wishDao.updateWishStatus(wishId, newStatus, itemPurchaseDate) ?: 0
         return rowsUpdated > 0
     }
 

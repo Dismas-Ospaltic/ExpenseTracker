@@ -50,6 +50,7 @@ import com.st11.expensetracker.viewmodel.CurrencyViewModel
 import com.st11.expensetracker.viewmodel.ExpenseViewModel
 import com.st11.expensetracker.viewmodel.IntervalViewModel
 import com.st11.expensetracker.viewmodel.MainViewModel
+import com.st11.expensetracker.viewmodel.OnboardingViewModel
 import compose.icons.FontAwesomeIcons
 import compose.icons.fontawesomeicons.Regular
 import compose.icons.fontawesomeicons.Solid
@@ -78,9 +79,18 @@ fun HomeScreen(navController: NavController) {
     )
     val interval = intervalData.userTimeInterval
 
+
+    val hasWorkerStated by intervalViewModel.hasWorkerStarted.collectAsState(initial = false)
+
+
     LaunchedEffect(Unit) {
 
-        viewModel.startReminderWorker(interval)
+        if (!hasWorkerStated) {
+            viewModel.startReminderWorker(interval)
+            intervalViewModel.markWorkerStarted()
+        }
+
+
 
     }
 

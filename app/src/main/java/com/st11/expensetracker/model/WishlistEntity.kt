@@ -16,6 +16,7 @@ data class WishlistEntity(
     val wishNote: String = null.toString(),
     val priority: String,
     val wishId: String,
+    val itemPurchaseDate: String = null.toString(),
     val wishStatus: String = "pending",
     val timestamp: Long = System.currentTimeMillis()
 )

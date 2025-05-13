@@ -81,9 +81,9 @@ class WishlistViewModel(private val wishlistRepository: WishlistRepository) : Vi
     /**
      * Update the status of a wishlist
      */
-    fun updateWishStatus(wishId: String, newStatus: String) {
+    fun updateWishStatus(wishId: String, newStatus: String, itemPurchaseDate: String) {
         viewModelScope.launch {
-            val success = wishlistRepository.updateWishStatus(wishId, newStatus)
+            val success = wishlistRepository.updateWishStatus(wishId, newStatus, itemPurchaseDate)
             if (success) {
                 // Refresh debt list if update is successful
                 _wishs.value = _wishs.value.map { wish ->

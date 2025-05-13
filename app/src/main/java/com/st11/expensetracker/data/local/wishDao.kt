@@ -28,8 +28,8 @@ interface WishDao {
     fun getAllTotalWishlist(): Flow<Int?>
 
 
-    @Query("UPDATE wishlist SET wishStatus = :wishStatus WHERE wishId = :wishId")
-    suspend fun updateWishStatus(wishId: String, wishStatus: String): Int?
+    @Query("UPDATE wishlist SET wishStatus = :wishStatus , itemPurchaseDate = :itemPurchaseDate WHERE wishId = :wishId")
+    suspend fun updateWishStatus(wishId: String, wishStatus: String, itemPurchaseDate: String): Int?
 
     @Query("SELECT SUM(estimateAmount) FROM wishlist")
     fun getAllTotalWishlistAmount(): Flow<Float?>

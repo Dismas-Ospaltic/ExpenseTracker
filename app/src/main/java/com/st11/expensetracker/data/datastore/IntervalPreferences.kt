@@ -14,7 +14,28 @@ class IntervalPreferences(private val context: Context) {
 
     companion object {
         val TIME_INTERVAL = longPreferencesKey("user_time_interval") // ✅ Use correct type key
+        private val workerStarted = booleanPreferencesKey("has_worker_started")
     }
+
+
+    // Flow to get the current Worker status
+    val hasWorkerStarted: Flow<Boolean> = context.dataStore.data
+        .map { preferences ->
+            preferences[workerStarted] ?: false  // Return false if no value is set
+        }
+
+    // Method to mark onboarding as completed
+    suspend fun markWorkerStarted() {
+        context.dataStore.edit { preferences ->
+            preferences[workerStarted] = true
+        }
+    }
+
+
+
+
+
+
 
     // Save user time interval
     suspend fun saveUserData(userTimeInterval: Long) {

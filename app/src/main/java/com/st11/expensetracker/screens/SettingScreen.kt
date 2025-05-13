@@ -107,7 +107,7 @@ fun SettingScreen(navController: NavController) {
                     onClick = { /* Navigate to policy screen */
                         val intent = Intent(
                             Intent.ACTION_VIEW,
-                            Uri.parse("https://st11-homy.github.io/MyDebts/privacy.html")
+                            Uri.parse("https://st11-homy.github.io/ExpenseTracker/privacy-policy.html")
                         )
                         context.startActivity(intent)
                     }

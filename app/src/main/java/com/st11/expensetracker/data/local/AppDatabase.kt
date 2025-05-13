@@ -10,7 +10,7 @@ import com.st11.expensetracker.model.ExpenseEntity
 import com.st11.expensetracker.model.WishlistEntity
 
 
-@Database(entities = [ExpenseEntity::class, WishlistEntity::class], version = 1, exportSchema = false)
+@Database(entities = [ExpenseEntity::class, WishlistEntity::class], version = 2, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun expenseDao(): ExpenseDao

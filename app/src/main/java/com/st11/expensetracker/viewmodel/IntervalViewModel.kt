@@ -14,6 +14,18 @@ class IntervalViewModel(
     private val intervalPreferences: IntervalPreferences
 ) : ViewModel() {
 
+
+    // Exposed Flow for Onboarding state
+    val hasWorkerStarted = intervalPreferences.hasWorkerStarted
+
+    // Method to complete onboarding
+    fun markWorkerStarted() {
+        viewModelScope.launch {
+            intervalPreferences.markWorkerStarted()
+        }
+    }
+
+
     // Expose time interval as StateFlow (better for Compose)
     val userTimeInterval: StateFlow<UserTimeData> =
         intervalPreferences.userTimeData
