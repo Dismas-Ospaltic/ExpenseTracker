@@ -66,10 +66,6 @@ class MainActivity : ComponentActivity() {
         // Ensure full-screen layout
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            requestNotificationPermission(this)
-        }
-
 
         setContent {
             val navController = rememberAnimatedNavController()
@@ -103,21 +99,7 @@ class MainActivity : ComponentActivity() {
     }
 
 
-//notification permission
-    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
-    private fun requestNotificationPermission(activity: Activity) {
-        if (ContextCompat.checkSelfPermission(
-                activity,
-                android.Manifest.permission.POST_NOTIFICATIONS
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            ActivityCompat.requestPermissions(
-                activity,
-                arrayOf(android.Manifest.permission.POST_NOTIFICATIONS),
-                1001
-            )
-        }
-    }
+
 
 
 }

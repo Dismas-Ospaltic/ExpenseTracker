@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feature Graphic Preview (1024x500)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif; /* Apply Inter font to the page */
+            background-color: #e5e7eb; /* Light gray background for the page itself */
+            margin: 0; /* Remove default margin */
+        }
+        .graphic-container {
+            width: 1024px;
+            height: 500px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15); /* Softer shadow for the container */
+            border-radius: 12px; /* Slightly more rounded corners for the container */
+            overflow: hidden; /* Ensures SVG corners are clipped if it extends beyond */
+            /* The SVG itself will define its dimensions, but this container ensures it's displayed correctly */
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-4">
+<div class="graphic-container">
+    <svg width="1024" height="500" viewBox="0 0 1024 500" xmlns="http://www.w3.org/2000/svg" font-family="Inter, Arial, sans-serif">
+        <defs>
+            <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#60A5FA; stop-opacity:1" /> <stop offset="100%" style="stop-color:#3B82F6; stop-opacity:1" /> </linearGradient>
+
+            <filter id="elementShadow" x="-20%" y="-20%" width="140%" height="140%">
+                <feGaussianBlur in="SourceAlpha" stdDeviation="6" result="blur"/>
+                <feOffset in="blur" dx="4" dy="4" result="offsetBlur"/>
+                <feFlood flood-color="#000000" flood-opacity="0.15" result="offsetColor"/>
+                <feComposite in="offsetColor" in2="offsetBlur" operator="in" result="shadowComp"/>
+                <feMerge>
+                    <feMergeNode in="shadowComp"/>
+                    <feMergeNode in="SourceGraphic"/>
+                </feMerge>
+            </filter>
+
+            <pattern id="subtleDots" x="0" y="0" width="25" height="25" patternUnits="userSpaceOnUse">
+                <circle cx="2" cy="2" r="1.2" fill="rgba(255,255,255,0.07)"/>
+            </pattern>
+        </defs>
+
+        <rect width="1024" height="500" fill="url(#bgGradient)" />
+        <rect width="1024" height="500" fill="url(#subtleDots)" />
+
+        <g id="text-content">
+            <text x="60" y="160" font-size="60" font-weight="900" fill="#FFFFFF" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.2);">
+                AppTitle
+            </text>
+            <text x="60" y="225" font-size="28" font-weight="400" fill="#EFF6FF" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.1);">
+                Your Notes & Tasks, Simplified.
+            </text>
+            <text x="60" y="270" font-size="20" font-weight="400" fill="#DBEAFE">
+                Capture ideas, manage projects, and boost productivity
+                <tspan x="60" dy="1.4em">effortlessly on all your devices.</tspan>
+            </text>
+        </g>
+
+        <g id="visual-elements" transform="translate(520, 40)">
+            <rect x="100" y="90" width="320" height="220" rx="25" ry="25" fill="#FFFFFF" opacity="0.6" transform="rotate(-8 260 200)" filter="url(#elementShadow)"/>
+            <rect x="120" y="70" width="320" height="220" rx="25" ry="25" fill="#E0F2FE" opacity="0.85" transform="rotate(6 280 180)" filter="url(#elementShadow)"/>
+            <rect x="110" y="80" width="320" height="220" rx="25" ry="25" fill="#FFFFFF" filter="url(#elementShadow)">
+                <text x="135" y="120" font-size="20" font-weight="bold" fill="#1E3A8A">Project Phoenix</text>
+                <line x1="135" y1="135" x2="405" y2="135" stroke="#93C5FD" stroke-width="2"/>
+                <circle cx="150" cy="165" r="9" fill="#34D399"/> <path d="M145 165 L149 169 L157 161" stroke="#FFFFFF" stroke-width="2" fill="none" stroke-linecap="round"/>
+                <text x="170" y="171" font-size="15" fill="#374151">Finalize design mockups</text>
+
+                <circle cx="150" cy="195" r="9" fill="#E5E7EB"/> <text x="170" y="201" font-size="15" fill="#4B5563">User testing feedback</text>
+
+                <circle cx="150" cy="225" r="9" fill="#E5E7EB"/> <text x="170" y="231" font-size="15" fill="#4B5563">Prepare presentation</text>
+            </rect>
+
+            <g transform="translate(360, 310)" filter="url(#elementShadow)">
+                <circle cx="0" cy="0" r="40" fill="#F87171"> <title>Add New Item</title>
+                </circle>
+                <line x1="-15" y1="0" x2="15" y2="0" stroke="#FFFFFF" stroke-width="5" stroke-linecap="round"/>
+                <line x1="0" y1="-15" x2="0" y2="15" stroke="#FFFFFF" stroke-width="5" stroke-linecap="round"/>
+            </g>
+
+            <g transform="translate(80, 300)" filter="url(#elementShadow)">
+                <circle cx="0" cy="0" r="35" fill="#34D399"> <title>Task Completed</title>
+                </circle>
+                <path d="M-15 0 L-5 10 L15 -8" stroke="#FFFFFF" stroke-width="6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+            </g>
+
+            <g id="simple-lightbulb" transform="translate(30, 30) scale(1)">
+                <title>Capture Ideas</title>
+                <g filter="url(#elementShadow)">
+                    <circle cx="25" cy="15" r="14" fill="#FBBF24"/> <circle cx="25" cy="15" r="18" fill="#FBBF24" opacity="0.3"/>
+                    <rect x="20" y="28" width="10" height="6" fill="#D1D5DB"/>
+                    <rect x="17" y="34" width="16" height="4" rx="1.5" fill="#9CA3AF"/>
+                    <rect x="17" y="39" width="16" height="4" rx="1.5" fill="#9CA3AF"/>
+                </g>
+                <line x1="25" y1="-5" x2="25" y2="-10" stroke="#FDE68A" stroke-width="2.5" stroke-linecap="round"/>
+                <line x1="10" y1="0" x2="5" y2="-3" stroke="#FDE68A" stroke-width="2.5" stroke-linecap="round"/>
+                <line x1="40" y1="0" x2="45" y2="-3" stroke="#FDE68A" stroke-width="2.5" stroke-linecap="round"/>
+            </g>
+        </g>
+
+        <circle cx="50" cy="450" r="20" fill="rgba(255,255,255,0.1)" />
+        <circle cx="980" cy="50" r="30" fill="rgba(255,255,255,0.08)" />
+        <rect x="900" y="400" width="80" height="80" rx="15" ry="15" fill="rgba(255,255,255,0.05)" transform="rotate(15 940 440)" />
+
+    </svg>
+</div>
+</body>
+</html>

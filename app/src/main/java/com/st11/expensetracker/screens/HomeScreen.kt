@@ -4,6 +4,7 @@ import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.os.Build
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -58,6 +59,7 @@ import compose.icons.fontawesomeicons.solid.Search
 import compose.icons.fontawesomeicons.solid.Users
 import org.koin.androidx.compose.getViewModel
 import org.koin.androidx.compose.koinViewModel
+import com.st11.expensetracker.utils.requestNotificationPermission
 
 
 
@@ -78,9 +80,14 @@ fun HomeScreen(navController: NavController) {
         initial = UserTimeData(userTimeInterval = 1L) //LATER CHANGE TO 1L
     )
     val interval = intervalData.userTimeInterval
-
-
     val hasWorkerStated by intervalViewModel.hasWorkerStarted.collectAsState(initial = false)
+    val context = LocalContext.current
+    val activity = context as? Activity
+
+
+
+
+
 
 
     LaunchedEffect(Unit) {
@@ -90,6 +97,12 @@ fun HomeScreen(navController: NavController) {
             intervalViewModel.markWorkerStarted()
         }
 
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (activity != null) {
+                requestNotificationPermission(activity)
+            }
+        }
 
 
     }

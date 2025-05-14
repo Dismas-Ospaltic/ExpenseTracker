@@ -40,6 +40,7 @@ import androidx.core.view.WindowInsetsControllerCompat
 import com.st11.expensetracker.R
 import com.st11.expensetracker.utils.DynamicStatusBar
 import com.st11.expensetracker.viewmodel.IntervalViewModel
+import com.st11.expensetracker.viewmodel.MainViewModel
 import compose.icons.FontAwesomeIcons
 import compose.icons.fontawesomeicons.Solid
 import compose.icons.fontawesomeicons.solid.Calendar
@@ -63,6 +64,7 @@ fun NotificationPreferenceScreen(navController: NavController) {
     DynamicStatusBar(backgroundColor)  // ✅ Apply dynamic status bar settings
 
     val intervalViewModel: IntervalViewModel = koinViewModel()
+    val viewModel: MainViewModel = koinViewModel()
 
     val intervals = listOf(
         "1 hr" to 1L,
@@ -139,6 +141,9 @@ fun NotificationPreferenceScreen(navController: NavController) {
                 onClick = {
                     //save to preferences
                     intervalViewModel.saveTimeInterval(selectedIntervalHours)
+                        viewModel.startReminderWorker(selectedIntervalHours)
+                        intervalViewModel.markWorkerStarted()
+
                     navController.popBackStack()
                 },
                 colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.green)),
