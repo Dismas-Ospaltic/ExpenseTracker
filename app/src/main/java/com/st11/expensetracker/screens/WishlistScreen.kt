@@ -41,6 +41,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.core.content.ContextCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
@@ -180,7 +181,13 @@ fun WishlistScreen(navController: NavController) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(paddingValues)
+                .padding(
+//                 paddingValues
+                    start = paddingValues.calculateStartPadding(LocalLayoutDirection.current),
+                    top = paddingValues.calculateTopPadding(),
+                    end = paddingValues.calculateEndPadding(LocalLayoutDirection.current),
+                    bottom = paddingValues.calculateBottomPadding() + 80.dp
+                )
                 .verticalScroll(rememberScrollState())
                 .background(colorResource(id = R.color.light_bg_color))
         ) {

@@ -18,8 +18,12 @@
     <color name="cooler">#6ea1e9</color>
     <color name="dark">#1D2231</color>
     <color name="text_gray">#8390A2</color>
-    <color name="green">#27ae60</color>
-    <color name="light_green">#7AE47E</color>
+<!--    <color name="green">#27ae60</color>-->
+<!--    <color name="light_green">#7AE47E</color>   -->
+    <color name="green">#588157</color>
+    <color name="light_green">#3A5A40</color>
+    <color name="light_green_fade">#A3B18A</color>
+    <color name="green_dark">#344E41</color>
     <color name="transparent_dark">#1D223180</color>
     <color name="orange">#F1410A</color>
     <color name="pink">#F60897</color>

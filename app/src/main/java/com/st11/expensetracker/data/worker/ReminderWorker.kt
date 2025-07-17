@@ -23,47 +23,6 @@ class ReminderWorker(appContext: Context, workerParams: WorkerParameters) :
         return Result.success()
     }
 
-//    private fun showNotification(title: String, message: String) {
-//        val channelId = "reminder_channel"
-//
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-//            val channel = NotificationChannel(
-//                channelId,
-//                "Reminder Notifications",
-//                NotificationManager.IMPORTANCE_DEFAULT
-//            )
-//            val manager = applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-//            manager.createNotificationChannel(channel)
-//        }
-//
-//        val builder = NotificationCompat.Builder(applicationContext, channelId)
-//            .setSmallIcon(R.drawable.budget) // Your icon
-//            .setContentTitle(title)
-//            .setContentText(message)
-//            .setAutoCancel(true)
-//            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-//
-//
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-//            if (ContextCompat.checkSelfPermission(applicationContext, android.Manifest.permission.POST_NOTIFICATIONS)
-//                == PackageManager.PERMISSION_GRANTED) {
-//
-//                with(NotificationManagerCompat.from(applicationContext)) {
-//                    notify(1001, builder.build())
-//                }
-//
-//            } else {
-//                // Permission not granted, do not show notification
-//            }
-//        } else {
-//            // For Android 12 and below (no permission required)
-//            with(NotificationManagerCompat.from(applicationContext)) {
-//                notify(1001, builder.build())
-//            }
-//        }
-//
-//
-//    }
 
     private fun showNotification(title: String, message: String) {
         val channelId = "reminder_channel"
@@ -93,7 +52,7 @@ class ReminderWorker(appContext: Context, workerParams: WorkerParameters) :
 
         // 🔥 Attach the intent to the notification
         val builder = NotificationCompat.Builder(applicationContext, channelId)
-            .setSmallIcon(R.drawable.budget)
+            .setSmallIcon(R.drawable.accountingnew)
             .setContentTitle(title)
             .setContentText(message)
             .setAutoCancel(true)

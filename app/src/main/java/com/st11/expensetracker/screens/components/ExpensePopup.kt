@@ -19,7 +19,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.MenuAnchorType
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
@@ -47,7 +46,6 @@ import androidx.compose.ui.unit.sp
 import com.st11.expensetracker.R
 import com.st11.expensetracker.model.ExpenseEntity
 import com.st11.expensetracker.viewmodel.ExpenseViewModel
-import io.michaelrocks.libphonenumber.android.PhoneNumberUtil
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 
@@ -196,10 +194,7 @@ fun ExpensePopup(onDismiss: () -> Unit) {
                         readOnly = true,
                         label = { Text("payment Method") },
                         modifier = Modifier
-                            .menuAnchor(
-                                type = MenuAnchorType.PrimaryEditable,
-                                enabled = true
-                            )
+                            .menuAnchor()
                             .fillMaxWidth(),
                         trailingIcon = {
                             ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded02)

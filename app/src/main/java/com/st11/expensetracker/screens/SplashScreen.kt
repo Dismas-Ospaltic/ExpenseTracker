@@ -26,7 +26,7 @@ fun SplashScreen(onNavigate: () -> Unit) {
 
         ) {
             Image(
-                painter = painterResource(id = com.st11.expensetracker.R.drawable.budget),
+                painter = painterResource(id = com.st11.expensetracker.R.drawable.accountingnew),
                 contentDescription = "Splash Image",
                 modifier = Modifier.size(150.dp)
             )

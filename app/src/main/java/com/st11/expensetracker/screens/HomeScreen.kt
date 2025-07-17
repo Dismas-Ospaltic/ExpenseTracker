@@ -38,6 +38,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.core.content.ContextCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
@@ -60,7 +61,7 @@ import compose.icons.fontawesomeicons.solid.Users
 import org.koin.androidx.compose.getViewModel
 import org.koin.androidx.compose.koinViewModel
 import com.st11.expensetracker.utils.requestNotificationPermission
-
+import compose.icons.fontawesomeicons.solid.Plus
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -83,6 +84,7 @@ fun HomeScreen(navController: NavController) {
     val hasWorkerStated by intervalViewModel.hasWorkerStarted.collectAsState(initial = false)
     val context = LocalContext.current
     val activity = context as? Activity
+    var showDialog by remember { mutableStateOf(false) } // State to control popup visibility
 
 
 
@@ -90,7 +92,8 @@ fun HomeScreen(navController: NavController) {
 
 
 
-    LaunchedEffect(Unit) {
+
+    LaunchedEffect(hasWorkerStated, interval) {
 
         if (!hasWorkerStated) {
             viewModel.startReminderWorker(interval)
@@ -143,7 +146,13 @@ fun HomeScreen(navController: NavController) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(paddingValues)
+                .padding(
+//                 paddingValues
+                    start = paddingValues.calculateStartPadding(LocalLayoutDirection.current),
+                    top = paddingValues.calculateTopPadding(),
+                    end = paddingValues.calculateEndPadding(LocalLayoutDirection.current),
+                    bottom = paddingValues.calculateBottomPadding() + 80.dp
+                )
                 .verticalScroll(rememberScrollState())
                 .background(colorResource(id = R.color.light_bg_color))
         ) {
@@ -270,6 +279,13 @@ fun HomeScreen(navController: NavController) {
             }
 
         }
+
+    // Show the Payment Popup if showDialog is true
+    if (showDialog) {
+        ExpensePopup(onDismiss = { showDialog = false })
+
+    }
+
     }
 
 

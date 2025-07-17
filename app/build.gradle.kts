@@ -12,7 +12,7 @@ android {
     defaultConfig {
         applicationId = "com.st11.expensetracker"
         minSdk = 26
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
 
@@ -115,21 +115,21 @@ dependencies {
     // Accompanist Pager Indicators (for page indicators like dots)
     implementation("com.google.accompanist:accompanist-pager-indicators:0.25.0")
 
-    //for gif display
-    implementation("io.coil-kt:coil-compose:2.4.0")
-    implementation("io.coil-kt:coil-gif:2.4.0") // Important: For GIF support
-
-
-//    //country code phone no
-//    implementation ("com.github.joielechong:countrycodepicker:2.4.2")
+//    //for gif display
+//    implementation("io.coil-kt:coil-compose:2.4.0")
+//    implementation("io.coil-kt:coil-gif:2.4.0") // Important: For GIF support
 //
-////    libphonenumber-android is an Android port of Google’s libphonenumber library, which provides phone number parsing, formatting, and validation
+//
+////    //country code phone no
+////    implementation ("com.github.joielechong:countrycodepicker:2.4.2")
+////
+//////    libphonenumber-android is an Android port of Google’s libphonenumber library, which provides phone number parsing, formatting, and validation
+////    implementation("io.michaelrocks:libphonenumber-android:8.13.27")
 //    implementation("io.michaelrocks:libphonenumber-android:8.13.27")
-    implementation("io.michaelrocks:libphonenumber-android:8.13.27")
-
-
-    implementation("com.patrykandpatrick.vico:compose:2.1.2") // Use latest version
-    implementation("com.patrykandpatrick.vico:core:2.1.2")
-    implementation("com.patrykandpatrick.vico:views:2.1.2") // Only if you use View system
-
+//
+//
+//    implementation("com.patrykandpatrick.vico:compose:2.1.2") // Use latest version
+//    implementation("com.patrykandpatrick.vico:core:2.1.2")
+//    implementation("com.patrykandpatrick.vico:views:2.1.2") // Only if you use View system
+//
 }

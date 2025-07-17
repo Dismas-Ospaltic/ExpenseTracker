@@ -65,6 +65,7 @@ fun NotificationPreferenceScreen(navController: NavController) {
 
     val intervalViewModel: IntervalViewModel = koinViewModel()
     val viewModel: MainViewModel = koinViewModel()
+    val hasWorkerStated by intervalViewModel.hasWorkerStarted.collectAsState(initial = false)
 
     val intervals = listOf(
         "1 hr" to 1L,
@@ -124,7 +125,7 @@ fun NotificationPreferenceScreen(navController: NavController) {
                         selected = selectedIntervalLabel == label,
                         onClick = { selectedIntervalLabel = label },
                         colors = RadioButtonDefaults.colors(
-                            selectedColor = colorResource(id = R.color.pink)
+                            selectedColor = colorResource(id = R.color.light_green)
                         )
                     )
                     Text(
@@ -141,8 +142,15 @@ fun NotificationPreferenceScreen(navController: NavController) {
                 onClick = {
                     //save to preferences
                     intervalViewModel.saveTimeInterval(selectedIntervalHours)
+                    if (hasWorkerStated){
+                        viewModel.stopReminderWorker()
+//                        intervalViewModel.markWorkerStopped()
                         viewModel.startReminderWorker(selectedIntervalHours)
                         intervalViewModel.markWorkerStarted()
+                    }else{
+                        viewModel.startReminderWorker(selectedIntervalHours)
+                    }
+
 
                     navController.popBackStack()
                 },

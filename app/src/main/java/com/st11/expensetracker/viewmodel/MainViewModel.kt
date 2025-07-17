@@ -4,11 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import com.st11.expensetracker.domain.usecase.ReminderScheduler
 
-//class MainViewModel(application: Application) : AndroidViewModel(application) {
-//    fun startReminderWorker(hours: Long = 3) {
-//        ReminderScheduler.scheduleReminder(getApplication(), hours)
-//    }
-//}
+
 
 class MainViewModel(
     application: Application,
@@ -18,4 +14,9 @@ class MainViewModel(
     fun startReminderWorker(hours: Long) {
         reminderScheduler.scheduleReminder(getApplication(), hours)
     }
+
+    fun stopReminderWorker() {
+        reminderScheduler.cancelReminder(getApplication())
+    }
+
 }

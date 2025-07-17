@@ -9,7 +9,6 @@ import android.os.Bundle
 import android.view.View
 import android.view.WindowManager
 import android.view.Window
-import android.view.WindowInsets
 import android.view.WindowInsetsController
 import androidx.compose.ui.res.painterResource
 import androidx.activity.ComponentActivity
@@ -19,9 +18,9 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Person
+import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -91,16 +90,17 @@ class MainActivity : ComponentActivity() {
                         WishlistFAB(navController = navController)
                     }
                 }
-
             ) { paddingValues ->
-                AppNavHost(navController, Modifier.padding(paddingValues))
+                AppNavHost(navController,
+                    Modifier
+                        .padding(paddingValues)
+                        .windowInsetsPadding(WindowInsets.systemBars))
             }
+//            ) { paddingValues ->
+//                AppNavHost(navController, Modifier.padding(paddingValues))
+//            }
         }
     }
-
-
-
-
 
 }
 

@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -139,7 +140,13 @@ fun AnalyticsScreen(navController: NavController) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(paddingValues)
+                .padding(
+                    //             paddingValues
+                    start = paddingValues.calculateStartPadding(LocalLayoutDirection.current),
+                    top = paddingValues.calculateTopPadding(),
+                    end = paddingValues.calculateEndPadding(LocalLayoutDirection.current),
+                    bottom = paddingValues.calculateBottomPadding() + 80.dp
+                )
                 .verticalScroll(rememberScrollState())
                 .background(colorResource(id = R.color.light_bg_color))
         ) {
@@ -327,7 +334,7 @@ fun AnalyticsScreen(navController: NavController) {
                             .height(100.dp)
                             .clip(RoundedCornerShape(16.dp)),
                         colors = CardDefaults.cardColors(
-                            containerColor = colorResource(id = R.color.light_green)
+                            containerColor = colorResource(id = R.color.light_green_fade)
                         ),
                         elevation = CardDefaults.cardElevation(8.dp)
                     ) {
@@ -367,10 +374,6 @@ fun AnalyticsScreen(navController: NavController) {
                     }
                 }
             }
-
-
-
-
 
             Column(modifier = Modifier.fillMaxSize()) {
 

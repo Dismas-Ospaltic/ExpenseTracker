@@ -181,7 +181,8 @@ fun OnboardingScreen(onCompleteOnboarding: () -> Unit) {
         HorizontalPagerIndicator(
             pagerState = pagerState,
             modifier = Modifier.padding(bottom = 32.dp),
-            activeColor = Color(0xFFE91E63), // pink
+//            activeColor = Color(0xFFE91E63), // pink
+            activeColor = colorResource(id = R.color.light_green), //green
             inactiveColor = Color.Gray
         )
 
@@ -193,7 +194,9 @@ fun OnboardingScreen(onCompleteOnboarding: () -> Unit) {
                 modifier = Modifier
                     .padding(bottom = 16.dp)
                     .fillMaxWidth(0.8f),
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFE91E63))
+//                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFE91E63))
+                colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.green))
+
             ) {
                 Text("Get Started")
             }
