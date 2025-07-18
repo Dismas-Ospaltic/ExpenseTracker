@@ -11,6 +11,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import com.st11.expensetracker.screens.AnalyticsScreen
+import com.st11.expensetracker.screens.CreditAuthorScreen
 import com.st11.expensetracker.screens.HomeScreen
 import com.st11.expensetracker.screens.NotificationPreferenceScreen
 import com.st11.expensetracker.screens.OnboardingScreen
@@ -37,6 +38,7 @@ sealed class Screen(val route: String) {
     object Setting : Screen("setting")
     object SelectCurrency : Screen("selectCurrency")
     object NotificationPref : Screen("notificationPref")
+    object CreditAuthor : Screen("creditAuthor")
 
 }
 
@@ -65,7 +67,7 @@ fun AppNavHost(navController: NavHostController, modifier: Modifier) {
         composable(Screen.SelectCurrency.route) { SelectCurrencyScreen(navController) }
         composable(Screen.Setting.route) { SettingScreen(navController) }
         composable(Screen.NotificationPref.route) { NotificationPreferenceScreen(navController) }
-
+        composable(Screen.CreditAuthor.route) { CreditAuthorScreen(navController) }
 
 //        composable(Screen.Detail.route) { backStackEntry ->
 //            val itemId = backStackEntry.arguments?.getString("itemId") ?: "Unknown"

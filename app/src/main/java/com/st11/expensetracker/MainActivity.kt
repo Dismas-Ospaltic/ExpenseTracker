@@ -73,7 +73,7 @@ class MainActivity : ComponentActivity() {
             val currentRoute = navBackStackEntry?.destination?.route
 
             // Define screens where the bottom bar should be hidden
-            val hideBottomBarScreens = listOf(Screen.Splash.route,Screen.Onboarding.route, Screen.SelectCurrency.route, Screen.NotificationPref.route)
+            val hideBottomBarScreens = listOf(Screen.Splash.route,Screen.Onboarding.route, Screen.SelectCurrency.route, Screen.NotificationPref.route,Screen.CreditAuthor.route)
 
             Scaffold(
                 bottomBar = {

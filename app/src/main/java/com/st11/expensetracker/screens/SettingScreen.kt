@@ -44,6 +44,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import com.st11.expensetracker.R
+import com.st11.expensetracker.navigation.Screen
 import com.st11.expensetracker.screens.components.ExpensePopup
 import com.st11.expensetracker.utils.DynamicStatusBar
 import compose.icons.FontAwesomeIcons
@@ -124,9 +125,14 @@ fun SettingScreen(navController: NavController) {
                 SettingsItem(
                     icon = FontAwesomeIcons.Solid.InfoCircle,
                     title = "About",
-                    onClick = { /*  */ /* navController.navigate("selectCurrency") */  },
+                    onClick = { /*  */ /* navController.navigate("selectCurrency") */
+                        navController.navigate(
+                            Screen.CreditAuthor.route
+                        )
+                    },
 //                    iconTint = Color.Red,
 //                    textColor = Color.Red
+
                 )
             }
 

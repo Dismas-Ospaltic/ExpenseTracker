@@ -36,6 +36,8 @@ import com.st11.expensetracker.viewmodel.ExpenseViewModel
 import com.st11.expensetracker.viewmodel.WishlistViewModel
 import compose.icons.FontAwesomeIcons
 import compose.icons.fontawesomeicons.Solid
+import compose.icons.fontawesomeicons.solid.AngleLeft
+import compose.icons.fontawesomeicons.solid.AngleRight
 import compose.icons.fontawesomeicons.solid.ArrowLeft
 import compose.icons.fontawesomeicons.solid.ArrowRight
 import org.koin.androidx.compose.koinViewModel
@@ -82,10 +84,10 @@ fun AnalyticsScreen(navController: NavController) {
 
 
     val cardData = listOf(
-        CardInfo("Total Spend", "${currency.userCurrency} $totalExpense", R.drawable.expenses),
+        CardInfo("Total Spend", "${currency.userCurrency} $totalExpense", R.drawable.moneyout),
         CardInfo("total Expenses This Month", "${currency.userCurrency} $totalMonthExpense", R.drawable.moneybag),
-        CardInfo("Total Wishlist", "${currency.userCurrency} $wishlistTotal", R.drawable.wishlist),
-        CardInfo("Wishlist No.", "$totalNoWishlist", R.drawable.wishlist),
+        CardInfo("Total Wishlist", "${currency.userCurrency} $wishlistTotal", R.drawable.expense),
+        CardInfo("Wishlist No.", "$totalNoWishlist", R.drawable.expense),
     )
 
 
@@ -481,17 +483,18 @@ fun AnalyticsScreen(navController: NavController) {
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     IconButton(onClick = { currentMonth.value = currentMonth.value.minusMonths(1) }) {
-                        Icon(imageVector = FontAwesomeIcons.Solid.ArrowLeft, contentDescription = "Previous Month")
+                        Icon(imageVector = FontAwesomeIcons.Solid.AngleLeft, contentDescription = "Previous Month",tint = colorResource(id = R.color.light_green), modifier = Modifier.size(24.dp))
                     }
 
                     Text(
-                        text = currentMonth.value.month.getDisplayName(TextStyle.FULL, Locale.getDefault()) + " " + currentMonth.value.year,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 18.sp
+                        text = currentMonth.value.month.getDisplayName(TextStyle.FULL, Locale.getDefault()) + " " + currentMonth.value.year +" Amount is in: ${currency.userCurrency}",
+                        fontWeight = FontWeight.SemiBold,
+                        fontSize = 18.sp,
+                        color = colorResource(id = R.color.dark)
                     )
 
                     IconButton(onClick = { currentMonth.value = currentMonth.value.plusMonths(1) }) {
-                        Icon(imageVector = FontAwesomeIcons.Solid.ArrowRight, contentDescription = "Next Month")
+                        Icon(imageVector = FontAwesomeIcons.Solid.AngleRight, contentDescription = "Next Month", tint = colorResource(id = R.color.light_green), modifier = Modifier.size(24.dp))
                     }
                 }
 
@@ -535,7 +538,7 @@ fun AnalyticsScreen(navController: NavController) {
                                 modifier = Modifier.width(40.dp)
                             ) {
                                 Text(
-                                    text = "${currency.userCurrency} ${amount.toInt()}",
+                                    text = " ${amount.toInt()}", //${currency.userCurrency}
                                     fontSize = 9.sp,
                                     color = Color.Gray,
                                     maxLines = 1,
@@ -555,14 +558,15 @@ fun AnalyticsScreen(navController: NavController) {
                                     Box(
                                         modifier = Modifier
                                             .height(barHeight.dp)
+                                            .width(24.dp)
                                             .background(
                                                colorResource(id = R.color.darkLight)
                                             )
 //                                            .background(
 //                                                Brush.verticalGradient(
 //                                                    listOf(
-//                                                        Color(0xFF4CAF50),
-//                                                        Color(0xFF81C784)
+//                                                        colorResource(id = R.color.dark),
+//                                                        colorResource(id = R.color.darkLight)
 //                                                    )
 //                                                )
 //                                            )
