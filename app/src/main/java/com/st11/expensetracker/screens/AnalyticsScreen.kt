@@ -1,6 +1,7 @@
 package com.st11.expensetracker.screens
 
 import android.util.Log
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -15,6 +16,8 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalLayoutDirection
@@ -334,7 +337,7 @@ fun AnalyticsScreen(navController: NavController) {
                             .height(100.dp)
                             .clip(RoundedCornerShape(16.dp)),
                         colors = CardDefaults.cardColors(
-                            containerColor = colorResource(id = R.color.light_green_fade)
+                            containerColor = colorResource(id = R.color.light_green)
                         ),
                         elevation = CardDefaults.cardElevation(8.dp)
                     ) {
@@ -361,13 +364,15 @@ fun AnalyticsScreen(navController: NavController) {
                                     text = card.title,
                                     fontSize = 16.sp,
                                     fontWeight = FontWeight.Medium,
-                                    color = Color.Black
+                                    color = Color.White
+//                                    color = Color.Black
                                 )
                                 Text(
                                     text = card.amount,
                                     fontSize = 18.sp,
                                     fontWeight = FontWeight.Bold,
-                                    color = Color.DarkGray
+                                    color = Color.White
+//                                    color = Color.DarkGray
                                 )
                             }
                         }
@@ -375,9 +380,99 @@ fun AnalyticsScreen(navController: NavController) {
                 }
             }
 
+//            Column(modifier = Modifier.fillMaxSize()) {
+//
+//                // Top controls
+//                Row(
+//                    modifier = Modifier
+//                        .fillMaxWidth()
+//                        .padding(16.dp),
+//                    horizontalArrangement = Arrangement.SpaceBetween,
+//                    verticalAlignment = Alignment.CenterVertically
+//                ) {
+//                    IconButton(onClick = {
+//                        currentMonth.value = currentMonth.value.minusMonths(1)
+//                    }) {
+//                        Icon(
+//                            imageVector = FontAwesomeIcons.Solid.ArrowLeft,
+//                            contentDescription = "Previous Month",
+//                            modifier = Modifier.size(24.dp)
+//                        )
+//                    }
+//
+//                    Text(
+//                        text = currentMonth.value.month.getDisplayName(TextStyle.FULL, Locale.getDefault()) + " " + currentMonth.value.year,
+//                        fontWeight = FontWeight.Bold,
+//                        fontSize = 18.sp
+//                    )
+//
+//                    IconButton(onClick = {
+//                        currentMonth.value = currentMonth.value.plusMonths(1)
+//                    }) {
+//                        Icon(
+//                            imageVector = FontAwesomeIcons.Solid.ArrowRight,
+//                            contentDescription = "Next Month",
+//                            modifier = Modifier.size(24.dp)
+//                        )
+//                    }
+//                }
+//
+//                // Bottom-origin Bar Chart
+//                LazyRow(
+//                    modifier = Modifier
+//                        .fillMaxWidth()
+//                        .height(chartHeight + 50.dp),
+//                    contentPadding = PaddingValues(horizontal = 8.dp)
+//                ) {
+//                    items(expenseData) { (day, amount) ->
+//                        val barHeight = (amount / maxAmount) * chartHeight.value
+//
+//                        Column(
+//                            horizontalAlignment = Alignment.CenterHorizontally,
+//                            modifier = Modifier
+//                                .width(40.dp)
+//                                .padding(horizontal = 4.dp)
+//                        ) {
+//
+//                            Text(
+//                                text = "${currency.userCurrency} ${amount.toInt()}",
+//                                fontSize = 10.sp,
+//                                modifier = Modifier.graphicsLayer {
+//                                    rotationZ = -80f // Rotate counter-clockwise
+//                                }
+//                            )
+//
+//
+//                            Spacer(modifier = Modifier.height(4.dp))
+//
+//                            // Box to align bar from bottom
+//                            Box(
+//                                modifier = Modifier
+//                                    .height(chartHeight)
+//                                    .width(20.dp),
+//                                contentAlignment = Alignment.BottomCenter
+//                            ) {
+//                                Box(
+//                                    modifier = Modifier
+//                                        .height(barHeight.dp)
+//                                        .width(20.dp)
+//                                        .clip(RoundedCornerShape(4.dp))
+//                                        .background(Color(0xFF4CAF50))
+//                                )
+//                            }
+//
+//                            Spacer(modifier = Modifier.height(4.dp))
+//                            Text(day, fontSize = 10.sp)
+////                            Text(text = amount.toInt().toString(), fontSize = 10.sp)
+//                        }
+//                    }
+//                }
+//            }
+
+
             Column(modifier = Modifier.fillMaxSize()) {
 
-                // Top controls
+                // Top controls (Previous / Next Month)
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -385,14 +480,8 @@ fun AnalyticsScreen(navController: NavController) {
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    IconButton(onClick = {
-                        currentMonth.value = currentMonth.value.minusMonths(1)
-                    }) {
-                        Icon(
-                            imageVector = FontAwesomeIcons.Solid.ArrowLeft,
-                            contentDescription = "Previous Month",
-                            modifier = Modifier.size(24.dp)
-                        )
+                    IconButton(onClick = { currentMonth.value = currentMonth.value.minusMonths(1) }) {
+                        Icon(imageVector = FontAwesomeIcons.Solid.ArrowLeft, contentDescription = "Previous Month")
                     }
 
                     Text(
@@ -401,71 +490,92 @@ fun AnalyticsScreen(navController: NavController) {
                         fontSize = 18.sp
                     )
 
-                    IconButton(onClick = {
-                        currentMonth.value = currentMonth.value.plusMonths(1)
-                    }) {
-                        Icon(
-                            imageVector = FontAwesomeIcons.Solid.ArrowRight,
-                            contentDescription = "Next Month",
-                            modifier = Modifier.size(24.dp)
-                        )
+                    IconButton(onClick = { currentMonth.value = currentMonth.value.plusMonths(1) }) {
+                        Icon(imageVector = FontAwesomeIcons.Solid.ArrowRight, contentDescription = "Next Month")
                     }
                 }
 
-                // Bottom-origin Bar Chart
-                LazyRow(
+                // Chart with X & Y Axis and grid lines
+                Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(chartHeight + 50.dp),
-                    contentPadding = PaddingValues(horizontal = 8.dp)
+                        .height(chartHeight + 50.dp)
+                        .padding(horizontal = 16.dp)
                 ) {
-                    items(expenseData) { (day, amount) ->
-                        val barHeight = (amount / maxAmount) * chartHeight.value
+                    Canvas(modifier = Modifier.matchParentSize()) {
+                        val chartWidth = size.width
+                        val chartHeightPx = size.height - 40.dp.toPx() // space for X labels
+                        val step = chartHeightPx / 5
 
-                        Column(
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                            modifier = Modifier
-                                .width(40.dp)
-                                .padding(horizontal = 4.dp)
-                        ) {
-
-                            Text(
-                                text = "${currency.userCurrency} ${amount.toInt()}",
-                                fontSize = 10.sp,
-                                modifier = Modifier.graphicsLayer {
-                                    rotationZ = -80f // Rotate counter-clockwise
-                                }
+                        // Draw horizontal grid lines
+                        for (i in 0..5) {
+                            val y = chartHeightPx - (i * step)
+                            drawLine(
+                                color = Color.LightGray.copy(alpha = 0.3f),
+                                start = Offset(0f, y),
+                                end = Offset(chartWidth, y),
+                                strokeWidth = 1.dp.toPx()
                             )
+                        }
+                    }
 
+                    // Bar Chart
+                    LazyRow(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(chartHeight + 40.dp),
+                        contentPadding = PaddingValues(horizontal = 8.dp),
+                        horizontalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
+                        items(expenseData) { (day, amount) ->
+                            val barHeight = (amount / maxAmount) * chartHeight.value
 
-                            Spacer(modifier = Modifier.height(4.dp))
-
-                            // Box to align bar from bottom
-                            Box(
-                                modifier = Modifier
-                                    .height(chartHeight)
-                                    .width(20.dp),
-                                contentAlignment = Alignment.BottomCenter
+                            Column(
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                modifier = Modifier.width(40.dp)
                             ) {
+                                Text(
+                                    text = "${currency.userCurrency} ${amount.toInt()}",
+                                    fontSize = 9.sp,
+                                    color = Color.Gray,
+                                    maxLines = 1,
+                                    modifier = Modifier.graphicsLayer {
+                                        rotationZ = -60f
+                                    }
+                                )
+
+                                Spacer(modifier = Modifier.height(6.dp))
+
                                 Box(
                                     modifier = Modifier
-                                        .height(barHeight.dp)
-                                        .width(20.dp)
-                                        .clip(RoundedCornerShape(4.dp))
-                                        .background(Color(0xFF4CAF50))
-                                )
-                            }
+                                        .height(chartHeight)
+                                        .width(24.dp),
+                                    contentAlignment = Alignment.BottomCenter
+                                ) {
+                                    Box(
+                                        modifier = Modifier
+                                            .height(barHeight.dp)
+                                            .background(
+                                               colorResource(id = R.color.darkLight)
+                                            )
+//                                            .background(
+//                                                Brush.verticalGradient(
+//                                                    listOf(
+//                                                        Color(0xFF4CAF50),
+//                                                        Color(0xFF81C784)
+//                                                    )
+//                                                )
+//                                            )
+                                    )
+                                }
 
-                            Spacer(modifier = Modifier.height(4.dp))
-                            Text(day, fontSize = 10.sp)
-//                            Text(text = amount.toInt().toString(), fontSize = 10.sp)
+                                Spacer(modifier = Modifier.height(8.dp))
+                                Text(day, fontSize = 12.sp, fontWeight = FontWeight.Bold, color = Color.Gray)
+                            }
                         }
                     }
                 }
             }
-            
-            
-            
             
             
             /////

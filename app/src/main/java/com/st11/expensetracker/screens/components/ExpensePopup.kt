@@ -93,8 +93,11 @@ fun ExpensePopup(onDismiss: () -> Unit) {
         onDismissRequest = { onDismiss() },
         title = { Text(text = "Add an Expense") },
         text = {
-            Column {
-
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .verticalScroll(rememberScrollState()) // ✅ Enable scrolling
+            ) {
                 Spacer(modifier = Modifier.height(24.dp))
 
                 OutlinedTextField(

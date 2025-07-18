@@ -54,9 +54,12 @@ import com.st11.expensetracker.viewmodel.WishlistViewModel
 import compose.icons.FontAwesomeIcons
 import compose.icons.fontawesomeicons.Regular
 import compose.icons.fontawesomeicons.Solid
+import compose.icons.fontawesomeicons.solid.Bookmark
 import compose.icons.fontawesomeicons.solid.DollarSign
+import compose.icons.fontawesomeicons.solid.InfoCircle
 import compose.icons.fontawesomeicons.solid.MoneyCheck
 import compose.icons.fontawesomeicons.solid.Search
+import compose.icons.fontawesomeicons.solid.StickyNote
 import compose.icons.fontawesomeicons.solid.Users
 import org.koin.androidx.compose.getViewModel
 import org.koin.androidx.compose.koinViewModel
@@ -287,53 +290,125 @@ fun WishlistScreen(navController: NavController) {
                         hapticFeedback.performHapticFeedback(HapticFeedbackType.LongPress)
                     }
 
+
+                    val priorityColor = when (item.priority.lowercase()) {
+                        "high" -> Color(0xFFFFE5E5)  // Light Red
+                        "medium" -> Color(0xFFFFF5E5) // Light Orange
+                        "low" -> Color(0xFFE5FFE5)    // Light Green
+                        else -> Color.White
+                    }
+
+
                     Card(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(8.dp)
+                            .padding(horizontal = 12.dp, vertical = 8.dp)
                             .combinedClickable(
                                 onClick = onClick,
                                 onLongClick = onLongPress
                             ),
-                        shape = RoundedCornerShape(12.dp),
-                        colors = CardDefaults.cardColors(containerColor = Color.White)
+                        shape = RoundedCornerShape(16.dp),
+                        elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
+//                        colors = CardDefaults.cardColors(containerColor = Color.White)
+                        colors = CardDefaults.cardColors(containerColor = priorityColor)
                     ) {
-                        // Show checkbox only if selected
-                        if (isSelected) {
-                            Checkbox(
-                                checked = true,
-                                onCheckedChange = { onLongPress() },
-                                colors = CheckboxDefaults.colors(
-                                    checkedColor = colorResource(id = R.color.teal_700),
-                                    uncheckedColor = colorResource(id = R.color.darkLight),
-                                    checkmarkColor = colorResource(id = R.color.white)
-                                )
-                            )
-                        }
-                        Text(
-                            text = "Target Date: ${formatDateToReadable(item.targetDate)}",
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 12.sp,
-                            color = colorResource(id = R.color.light_green),
-                            modifier = Modifier.align(Alignment.End).
-                            padding(8.dp)
-                        )
-                        Text(
-                            text = "Status: ${item.wishStatus}",
-                            modifier = Modifier.align(Alignment.End).
-                            padding(end = 8.dp)
-                        )
-                        Spacer(modifier = Modifier.height(8.dp))
                         Column(modifier = Modifier.padding(16.dp)) {
 
+                            // Top Row: Date, Status, Checkbox if selected
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Column {
+                                    Text(
+                                        text = "Target Date: ${formatDateToReadable(item.targetDate)}",
+                                        fontWeight = FontWeight.Bold,
+                                        fontSize = 14.sp,
+                                        color = colorResource(id = R.color.light_green)
+                                    )
+                                    Text(
+                                        text = "Status: ${item.wishStatus}",
+                                        fontSize = 12.sp,
+                                        color = colorResource(id = R.color.gray01)
+                                    )
+                                }
 
-                            Text("Priority: ${item.priority}", color = colorResource(id = R.color.light_green))
-                            Text("Item Name: ${item.itemName}")
-                            Text("Estimated Price: ${currency.userCurrency} ${item.estimateAmount}")
-                            Text("Description: ${item.wishDescription}")
-                            Text("Notes: ${item.wishNote.ifBlank { "No note added" }}")
+                                if (isSelected) {
+                                    Checkbox(
+                                        checked = true,
+                                        onCheckedChange = { onLongPress() },
+                                        colors = CheckboxDefaults.colors(
+                                            checkedColor = colorResource(id = R.color.teal_700),
+                                            uncheckedColor = colorResource(id = R.color.darkLight),
+                                            checkmarkColor = colorResource(id = R.color.white)
+                                        )
+                                    )
+                                }
+                            }
+
+                            Spacer(modifier = Modifier.height(12.dp))
+
+                            // Main Details with Icons
+                            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                                Row(verticalAlignment = Alignment.CenterVertically) {
+                                    Icon(
+                                        imageVector = FontAwesomeIcons.Solid.MoneyCheck, // Add icon
+                                        contentDescription = "Priority",
+                                        tint = colorResource(id = R.color.light_green),
+                                        modifier = Modifier.size(18.dp)
+                                    )
+                                    Spacer(modifier = Modifier.width(8.dp))
+                                    Text("Priority: ${item.priority}", fontSize = 14.sp, fontWeight = FontWeight.SemiBold)
+                                }
+
+                                Row(verticalAlignment = Alignment.CenterVertically) {
+                                    Icon(
+                                        imageVector = FontAwesomeIcons.Solid.Bookmark, // Add icon
+                                        contentDescription = "Item Name",
+                                        tint = colorResource(id = R.color.light_green),
+                                        modifier = Modifier.size(18.dp)
+                                    )
+                                    Spacer(modifier = Modifier.width(8.dp))
+                                    Text("Item: ${item.itemName}", fontSize = 16.sp, fontWeight = FontWeight.Bold)
+                                }
+
+                                Row(verticalAlignment = Alignment.CenterVertically) {
+                                    Icon(
+                                        imageVector = FontAwesomeIcons.Solid.DollarSign, // Add icon
+                                        contentDescription = "Estimated Price",
+                                        tint = colorResource(id = R.color.light_green),
+                                        modifier = Modifier.size(18.dp)
+                                    )
+                                    Spacer(modifier = Modifier.width(8.dp))
+                                    Text("Estimated Price: ${currency.userCurrency} ${item.estimateAmount}")
+                                }
+
+                                Row(verticalAlignment = Alignment.CenterVertically) {
+                                    Icon(
+                                        imageVector = FontAwesomeIcons.Solid.InfoCircle,
+                                        contentDescription = "Description",
+                                        tint = colorResource(id = R.color.light_green),
+                                        modifier = Modifier.size(18.dp)
+                                    )
+                                    Spacer(modifier = Modifier.width(8.dp))
+                                    Text("Description: ${item.wishDescription}")
+                                }
+
+                                Row(verticalAlignment = Alignment.CenterVertically) {
+                                    Icon(
+                                        imageVector = FontAwesomeIcons.Solid.StickyNote,
+                                        contentDescription = "Notes",
+                                        tint = colorResource(id = R.color.light_green),
+                                        modifier = Modifier.size(18.dp)
+                                    )
+                                    Spacer(modifier = Modifier.width(8.dp))
+                                    Text("Notes: ${item.wishNote.ifBlank { "No note added" }}")
+                                }
+                            }
                         }
                     }
+
                 }
 
 

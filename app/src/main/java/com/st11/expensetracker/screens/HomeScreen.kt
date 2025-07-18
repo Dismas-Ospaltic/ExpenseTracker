@@ -39,6 +39,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.core.content.ContextCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
@@ -61,6 +62,8 @@ import compose.icons.fontawesomeicons.solid.Users
 import org.koin.androidx.compose.getViewModel
 import org.koin.androidx.compose.koinViewModel
 import com.st11.expensetracker.utils.requestNotificationPermission
+import compose.icons.fontawesomeicons.solid.DollarSign
+import compose.icons.fontawesomeicons.solid.MoneyCheck
 import compose.icons.fontawesomeicons.solid.Plus
 
 
@@ -236,43 +239,114 @@ fun HomeScreen(navController: NavController) {
 //                    repeat(10) { index ->
 //                items(filteredPeople) { index, person ->
                 for (index in filteredExpenses.indices) {
-                        Card(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(8.dp)
-                                .clickable {
+//                        Card(
+//                            modifier = Modifier
+//                                .fillMaxWidth()
+//                                .padding(8.dp)
+//                                .clickable {
+//
+//                                },
+//                            shape = RoundedCornerShape(12.dp),
+//                            colors = CardDefaults.cardColors(containerColor = Color.White)
+//                        ) {
+//                            Text(text = "${currency.userCurrency} ${expenses[index].expenseAmount}", fontWeight = FontWeight.Bold, fontSize = 24.sp,
+//                                modifier = Modifier.align(Alignment.End)
+//                                    .padding(8.dp)
+//                            ,
+//                                color = colorResource(id = R.color.light_green)
+//                            )
+//                            Spacer(modifier = Modifier.height(4.dp))
+//                            Text(text = expenses[index].expenseCategory, fontWeight = FontWeight.Bold, fontSize = 12.sp,
+//                                modifier = Modifier.align(Alignment.End)
+//                                    .padding(end = 8.dp)
+//                                ,
+//                                color = colorResource(id = R.color.light_green)
+//                            )
+//                            Row(
+//                                modifier = Modifier
+//                                    .fillMaxWidth()
+//                                    .padding(16.dp),
+//                                verticalAlignment = Alignment.CenterVertically
+//                            ) {
+//                                Column(modifier = Modifier.weight(1f)) {
+//                                    Text(text = expenses[index].expenseDescription, color = colorResource(id= R.color.gray01))
+//                                    formatDateToReadable(expenses[index].expenseDate)?.let { Text(text = it) }
+//                                    Text(text = "payment mode: " + expenses[index].paymentMode, color = colorResource(id= R.color.dark))
+//                                }
+//                            }
+//                        }
+                    Card(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 12.dp, vertical = 8.dp)
+                            .clickable { /* Handle click */ },
+                        shape = RoundedCornerShape(16.dp),
+                        elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
+                        colors = CardDefaults.cardColors(containerColor = Color.White)
+                    ) {
+                        Column(modifier = Modifier.padding(16.dp)) {
 
-                                },
-                            shape = RoundedCornerShape(12.dp),
-                            colors = CardDefaults.cardColors(containerColor = Color.White)
-                        ) {
-                            Text(text = "${currency.userCurrency} ${expenses[index].expenseAmount}", fontWeight = FontWeight.Bold, fontSize = 24.sp,
-                                modifier = Modifier.align(Alignment.End)
-                                    .padding(8.dp)
-                            ,
-                                color = colorResource(id = R.color.light_green)
-                            )
-                            Spacer(modifier = Modifier.height(4.dp))
-                            Text(text = expenses[index].expenseCategory, fontWeight = FontWeight.Bold, fontSize = 12.sp,
-                                modifier = Modifier.align(Alignment.End)
-                                    .padding(end = 8.dp)
-                                ,
-                                color = colorResource(id = R.color.light_green)
-                            )
+                            // Top Row: Amount & Category
                             Row(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(16.dp),
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceBetween,
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
-                                Column(modifier = Modifier.weight(1f)) {
-                                    Text(text = expenses[index].expenseDescription, color = colorResource(id= R.color.gray01))
-                                    formatDateToReadable(expenses[index].expenseDate)?.let { Text(text = it) }
-                                    Text(text = "payment mode: " + expenses[index].paymentMode, color = colorResource(id= R.color.dark))
+                                Column {
+                                    Text(
+                                        text = expenses[index].expenseCategory,
+                                        fontSize = 14.sp,
+                                        fontWeight = FontWeight.SemiBold,
+                                        color = colorResource(id = R.color.gray01)
+                                    )
+                                    Spacer(modifier = Modifier.height(4.dp))
+                                    Text(
+                                        text = formatDateToReadable(expenses[index].expenseDate) ?: "",
+                                        fontSize = 12.sp,
+                                        color = Color.Gray
+                                    )
                                 }
+
+                                Text(
+                                    text = "${currency.userCurrency} ${expenses[index].expenseAmount}",
+                                    fontSize = 22.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = colorResource(id = R.color.light_green)
+                                )
+                            }
+
+                            Spacer(modifier = Modifier.height(12.dp))
+
+                            // Description
+                            Text(
+                                text = expenses[index].expenseDescription,
+                                fontSize = 16.sp,
+                                color = colorResource(id = R.color.dark),
+                                maxLines = 2,
+                                overflow = TextOverflow.Ellipsis
+                            )
+
+                            Spacer(modifier = Modifier.height(8.dp))
+
+                            // Bottom Row: Payment mode with icon
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Icon(
+                                    imageVector = FontAwesomeIcons.Solid.DollarSign,
+                                    contentDescription = "money check",
+                                    tint = colorResource(id = R.color.light_green),
+                                    modifier = Modifier.size(18.dp)
+                                )
+                                Spacer(modifier = Modifier.width(6.dp))
+                                Text(
+                                    text = "Payment: ${expenses[index].paymentMode}",
+                                    fontSize = 14.sp,
+                                    color = colorResource(id = R.color.gray01)
+                                )
                             }
                         }
                     }
+
+                }
 
                 }
 

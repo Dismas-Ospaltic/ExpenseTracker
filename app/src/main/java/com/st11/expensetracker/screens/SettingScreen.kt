@@ -125,8 +125,8 @@ fun SettingScreen(navController: NavController) {
                     icon = FontAwesomeIcons.Solid.InfoCircle,
                     title = "About",
                     onClick = { /*  */ /* navController.navigate("selectCurrency") */  },
-                    iconTint = Color.Red,
-                    textColor = Color.Red
+//                    iconTint = Color.Red,
+//                    textColor = Color.Red
                 )
             }
 

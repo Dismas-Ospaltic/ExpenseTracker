@@ -99,7 +99,11 @@ fun WishlistPopup(onDismiss: () -> Unit) {
         onDismissRequest = { onDismiss() },
         title = { Text(text = "Add To Wishlist") },
         text = {
-            Column {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .verticalScroll(rememberScrollState()) // ✅ Enable scrolling
+            ) {
 
                 Spacer(modifier = Modifier.height(24.dp))
 
