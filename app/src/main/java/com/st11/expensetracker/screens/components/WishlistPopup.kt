@@ -3,16 +3,24 @@ package com.st11.expensetracker.screens.components
 
 import android.app.DatePickerDialog
 import android.widget.Toast
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
@@ -21,6 +29,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
@@ -34,9 +43,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import com.st11.expensetracker.R
+import com.st11.expensetracker.model.ExpenseEntity
 import com.st11.expensetracker.model.WishlistEntity
 import com.st11.expensetracker.viewmodel.WishlistViewModel
 import compose.icons.FontAwesomeIcons
@@ -95,17 +108,54 @@ fun WishlistPopup(onDismiss: () -> Unit) {
     }
 
 
-    AlertDialog(
-        onDismissRequest = { onDismiss() },
-        title = { Text(text = "Add To Wishlist") },
-        text = {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .verticalScroll(rememberScrollState()) // ✅ Enable scrolling
-            ) {
+//    AlertDialog(
+//        onDismissRequest = { onDismiss() },
+//        title = { Text(text = "Add To Wishlist") },
+//        text = {
+//            Column(
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//                    .verticalScroll(rememberScrollState()) // ✅ Enable scrolling
+//            ) {
+//
+//
+//
+//
+//            }
+//        },
+//        confirmButton = {
+//
+//            TextButton(onClick = { /* Handle submission */
+//
+//            }) {
+//                Text("Add", color = colorResource(R.color.green))
+//            }
+//        },
+//        dismissButton = {
+//            TextButton(onClick = { onDismiss() }) {
+//                Text("Cancel", color = colorResource(R.color.red))
+//            }
+//        }
+//    )
 
-                Spacer(modifier = Modifier.height(24.dp))
+    Dialog(onDismissRequest = { onDismiss() }) {
+        Surface(
+            shape = RoundedCornerShape(16.dp),
+            color = Color.White,
+            tonalElevation = 8.dp,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
+        ) {
+            Column(
+                Modifier
+                    .padding(16.dp)
+                    .imePadding()
+                    .verticalScroll(rememberScrollState()), // Adjust for keyboard
+                verticalArrangement = Arrangement.spacedBy(12.dp)
+
+            ) {
+                Text(text = "Add To Wishlist", fontWeight = FontWeight.Bold, fontSize = 18.sp)
 
                 OutlinedTextField(
                     value = itemName,
@@ -123,7 +173,7 @@ fun WishlistPopup(onDismiss: () -> Unit) {
                     singleLine = true,
                 )
 
-                Spacer(modifier = Modifier.height(16.dp))
+
 
                 OutlinedTextField(
                     value = estimatedAmount,
@@ -142,11 +192,11 @@ fun WishlistPopup(onDismiss: () -> Unit) {
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
                 )
 
-                Spacer(modifier = Modifier.height(16.dp))
+
 
 
                 // Date Picker TextField
-                TextField(
+                OutlinedTextField(
                     value = date,
                     onValueChange = {},
                     label = { Text("Target Date") },
@@ -165,22 +215,21 @@ fun WishlistPopup(onDismiss: () -> Unit) {
                     },
                     colors = OutlinedTextFieldDefaults.colors(
                         unfocusedContainerColor = Color.White.copy(alpha = 0.9f),
-                    focusedContainerColor = Color.White.copy(alpha = 0.95f),
-                    focusedBorderColor = backgroundColor,
-                    unfocusedBorderColor = Color.Gray,
-                    focusedLabelColor = backgroundColor,
-                    cursorColor = backgroundColor
-                )
+                        focusedContainerColor = Color.White.copy(alpha = 0.95f),
+                        focusedBorderColor = backgroundColor,
+                        unfocusedBorderColor = Color.Gray,
+                        focusedLabelColor = backgroundColor,
+                        cursorColor = backgroundColor
+                    )
                 )
 
 
-                Spacer(modifier = Modifier.height(16.dp))
 
                 ExposedDropdownMenuBox(
                     expanded = expanded,
                     onExpandedChange = { expanded = !expanded }
                 ) {
-                    TextField(
+                    OutlinedTextField(
                         value = priority,
                         onValueChange = {},
                         readOnly = true,
@@ -205,7 +254,9 @@ fun WishlistPopup(onDismiss: () -> Unit) {
 
                     ExposedDropdownMenu(
                         expanded = expanded,
-                        onDismissRequest = { expanded = false }
+                        onDismissRequest = { expanded = false },
+                        modifier = Modifier
+                            .background(Color.White)
                     ) {
                         priorityType.forEach { selectionOption ->
                             DropdownMenuItem(
@@ -219,7 +270,7 @@ fun WishlistPopup(onDismiss: () -> Unit) {
                     }
                 }
 
-                Spacer(modifier = Modifier.height(16.dp))
+
 
                 OutlinedTextField(
                     value = itemDescription,
@@ -242,7 +293,7 @@ fun WishlistPopup(onDismiss: () -> Unit) {
                     maxLines = 4
                 )
 
-                Spacer(modifier = Modifier.height(16.dp))
+
 
                 OutlinedTextField(
                     value = notes,
@@ -265,49 +316,71 @@ fun WishlistPopup(onDismiss: () -> Unit) {
                     maxLines = 4
                 )
 
-                Spacer(modifier = Modifier.height(16.dp))
 
 
 
 
 
-            }
-        },
-        confirmButton = {
 
-            TextButton(onClick = { /* Handle submission */
-                if (estimatedAmount.isNotBlank() && itemDescription.isNotBlank() && priority.isNotBlank() && itemName.isNotBlank()) {
-
-                    CoroutineScope(Dispatchers.Main).launch {
-                       wishlistViewModel.insertWish(
-                           WishlistEntity(
-                               wishId = generateSixDigitRandomNumberWishlist().toString(),
-                               itemName = itemName,
-                               estimateAmount = estimatedAmount.toFloat(),
-                               priority = priority,
-                               targetDate = date,
-                               wishDescription = itemDescription,
-                               wishNote = notes
-                           )
-                       )
-
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.End
+                ) {
+                    TextButton(
+                        onClick = {onDismiss()},
+                        colors = ButtonDefaults.textButtonColors(
+                            contentColor = Color.Gray // text color
+                        )
+                    ) {
+                        Text("Cancel")
                     }
 
-                    onDismiss()
-                }else{
-                    Toast.makeText(context, "All fields are required", Toast.LENGTH_LONG).show()
+                    // Save Button (Green background)
+                    Button(
+                        onClick = {
+                            if (estimatedAmount.isNotBlank() && itemDescription.isNotBlank() && priority.isNotBlank() && itemName.isNotBlank()) {
+
+                                CoroutineScope(Dispatchers.Main).launch {
+                                    wishlistViewModel.insertWish(
+                                        WishlistEntity(
+                                            wishId = generateSixDigitRandomNumberWishlist().toString(),
+                                            itemName = itemName,
+                                            estimateAmount = estimatedAmount.toFloat(),
+                                            priority = priority,
+                                            targetDate = date,
+                                            wishDescription = itemDescription,
+                                            wishNote = notes
+                                        )
+                                    )
+
+                                }
+
+                                onDismiss()
+                            }else{
+                                Toast.makeText(context, "All fields are required", Toast.LENGTH_LONG).show()
+                            }
+                        },
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = Color(0xFF4CAF50), // Green background
+                            contentColor = Color.White          // White text
+                        )
+                    ) {
+                        Text("Save")
+                    }
+
                 }
-            }) {
-                Text("Add", color = colorResource(R.color.green))
             }
-        },
-        dismissButton = {
-            TextButton(onClick = { onDismiss() }) {
-                Text("Cancel", color = colorResource(R.color.red))
-            }
+
         }
-    )
-}
+
+    }
+
+
+
+
+
+
+            }
 
 fun generateSixDigitRandomNumberWishlist(): Int {
     return Random.nextInt(100000, 1000000)  // Generates a random number between 100000 (inclusive) and 1000000 (exclusive)

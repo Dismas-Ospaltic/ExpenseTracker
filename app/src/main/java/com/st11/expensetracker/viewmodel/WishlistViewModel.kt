@@ -106,6 +106,30 @@ class WishlistViewModel(private val wishlistRepository: WishlistRepository) : Vi
     }
 
 
+    private val _totalWishlistPendingAmount = MutableStateFlow(0.0f)
+    val totalWishlistPendingAmount: StateFlow<Float> = _totalWishlistPendingAmount
+    fun getAllTotalWishlistPendingAmount() {
+        viewModelScope.launch {
+            wishlistRepository.getAllTotalWishlistPendingAmount().collectLatest { total ->
+                _totalWishlistPendingAmount.value = total
+            }
+        }
+
+    }
+
+
+    private val _totalWishlistPurchasedAmount = MutableStateFlow(0.0f)
+    val totalWishlistPurchasedAmount: StateFlow<Float> = _totalWishlistPurchasedAmount
+    fun getAllTotalWishlistPurchasedAmount() {
+        viewModelScope.launch {
+            wishlistRepository.getAllTotalWishlistPurchasedAmount().collectLatest { total ->
+                _totalWishlistPurchasedAmount.value = total
+            }
+        }
+    }
+
+
+
     private val _totalNoWishlist = MutableStateFlow(0)
     val totalNoWishlist : StateFlow<Int> = _totalNoWishlist
 

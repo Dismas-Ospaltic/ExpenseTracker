@@ -35,5 +35,10 @@ interface WishDao {
     fun getAllTotalWishlistAmount(): Flow<Float?>
 
 
+    @Query("SELECT SUM(estimateAmount) FROM wishlist WHERE wishStatus = 'pending'")
+    fun getAllTotalWishlistPendingAmount(): Flow<Float?>
+
+    @Query("SELECT SUM(estimateAmount) FROM wishlist WHERE wishStatus = 'Purchased'")
+    fun getAllTotalWishlistPurchasedAmount(): Flow<Float?>
 
 }

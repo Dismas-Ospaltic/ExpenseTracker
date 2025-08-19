@@ -70,6 +70,11 @@ fun AnalyticsScreen(navController: NavController) {
     val totalNoWishlist by wishlistViewModel.totalNoWishlist.collectAsState(initial = 0)
 
 
+    val totalPendingWishList by wishlistViewModel.totalWishlistPendingAmount.collectAsState(initial = 0.0f)
+    val totalPurchaseWishlist by wishlistViewModel.totalWishlistPurchasedAmount.collectAsState(initial = 0.0f)
+
+
+
 
     val currentYearMonth = YearMonth.now().toString() // "2025-05"
 //    val totalForThisMonth = expenseDao.getMonthlyTotalExpense(currentYearMonth)
@@ -80,6 +85,8 @@ fun AnalyticsScreen(navController: NavController) {
         expenseViewModel.getMonthlyTotalExpense(currentYearMonth)
         wishlistViewModel.getAllTotalWishlistAmount()
         wishlistViewModel.getAllTotalWishlist()
+        wishlistViewModel.getAllTotalWishlistPendingAmount()
+        wishlistViewModel.getAllTotalWishlistPurchasedAmount()
     }
 
 
@@ -88,7 +95,9 @@ fun AnalyticsScreen(navController: NavController) {
         CardInfo("Total Spend", "${currency.userCurrency} $totalExpense", R.drawable.moneyout),
         CardInfo("total Expenses This Month", "${currency.userCurrency} $totalMonthExpense", R.drawable.moneybag),
         CardInfo("Total Wishlist", "${currency.userCurrency} $wishlistTotal", R.drawable.expense),
-        CardInfo("Wishlist No.", "$totalNoWishlist", R.drawable.expense),
+        CardInfo("Number of Wishlist", "$totalNoWishlist", R.drawable.expense),
+        CardInfo("Total pending Wishlist", "$totalPendingWishList", R.drawable.expense),
+        CardInfo("Total Purchased Wishlist", "$totalPurchaseWishlist", R.drawable.expense)
     )
 
 
@@ -571,7 +580,7 @@ fun AnalyticsScreen(navController: NavController) {
                                             .height(barHeight.dp)
                                             .width(24.dp)
                                             .background(
-                                               colorResource(id = R.color.darkLight)
+                                               colorResource(id = R.color.text_gray)
                                             )
 //                                            .background(
 //                                                Brush.verticalGradient(

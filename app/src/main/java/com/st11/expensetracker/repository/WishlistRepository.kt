@@ -33,6 +33,17 @@ class WishlistRepository(private val wishDao: WishDao) {
     }
 
 
+    fun getAllTotalWishlistPendingAmount(): Flow<Float> {
+        return wishDao.getAllTotalWishlistPendingAmount()
+            .map { total -> total ?: 0.0f }  // Convert NULL to 0.0
+    }
+
+    fun getAllTotalWishlistPurchasedAmount(): Flow<Float> {
+        return wishDao.getAllTotalWishlistPurchasedAmount()
+            .map { total -> total ?: 0.0f }  // Convert NULL to 0.0
+    }
+
+
 
     suspend fun updateWishStatus(wishId: String, newStatus: String, itemPurchaseDate: String): Boolean {
         val rowsUpdated = wishDao.updateWishStatus(wishId, newStatus, itemPurchaseDate) ?: 0
