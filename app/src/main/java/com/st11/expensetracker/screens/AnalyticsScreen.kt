@@ -24,6 +24,7 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -474,6 +475,16 @@ fun AnalyticsScreen(navController: NavController) {
 
             Column(modifier = Modifier.fillMaxSize()) {
 
+                Text(
+                    text = "Amount is in: ${currency.userCurrency}",
+                    fontWeight = FontWeight.SemiBold,
+                    fontSize = 18.sp,
+                    color = colorResource(id = R.color.dark),
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.fillMaxWidth()
+                )
+
+
                 // Top controls (Previous / Next Month)
                 Row(
                     modifier = Modifier
@@ -487,9 +498,9 @@ fun AnalyticsScreen(navController: NavController) {
                     }
 
                     Text(
-                        text = currentMonth.value.month.getDisplayName(TextStyle.FULL, Locale.getDefault()) + " " + currentMonth.value.year +" Amount is in: ${currency.userCurrency}",
+                        text = currentMonth.value.month.getDisplayName(TextStyle.FULL, Locale.getDefault()) + " " + currentMonth.value.year,
                         fontWeight = FontWeight.SemiBold,
-                        fontSize = 18.sp,
+                        fontSize = 16.sp,
                         color = colorResource(id = R.color.dark)
                     )
 

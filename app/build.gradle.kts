@@ -7,14 +7,14 @@ plugins {
 
 android {
     namespace = "com.st11.expensetracker"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.st11.expensetracker"
-        minSdk = 26
-        targetSdk = 35
-        versionCode = 1
-        versionName = "1.0"
+        minSdk = 24
+        targetSdk = 36
+        versionCode = 2
+        versionName = "1.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -29,15 +29,16 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "11"
+        jvmTarget = "17"
     }
     buildFeatures {
         compose = true
     }
+    ndkVersion = "28.2.13676358"
 }
 
 dependencies {
@@ -60,7 +61,7 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
 
     //lottie file animations
-    implementation("com.github.LottieFiles:dotlottie-android:0.5.0")
+    implementation("com.github.LottieFiles:dotlottie-android:0.9.3")
 
     implementation("com.airbnb.android:lottie-compose:6.1.0")
 
