@@ -205,6 +205,8 @@ fun CreditAuthorScreen(navController: NavController) {
                 "-Total expenses this month icon image designed by Freepik from Flaticon",
                 "-Total Wishlist icon image designed by nawicon from Flaticon",
                 "-Total Wishlist No. icon image designed by nawicon from Flaticon",
+                "-Total Purchased Wishlist icon image designed by Uniconlabs from Flaticon",
+                "-Total pending Wishlist icon image designed by Freepik from Flaticon",
             )
 
             iconCredits.forEach { credit ->

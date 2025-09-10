@@ -291,7 +291,11 @@ fun ExpensePopup(onDismiss: () -> Unit) {
 
                 OutlinedTextField(
                     value = amount,
-                    onValueChange = { amount = it },
+//                    onValueChange = { amount = it },
+                    onValueChange = { input ->
+                        // Remove commas automatically as user types
+                        amount = input.replace(",", "")
+                    },
                     label = { Text("Amount") },
                     modifier = Modifier.fillMaxWidth(),
                     colors = OutlinedTextFieldDefaults.colors(
@@ -306,7 +310,6 @@ fun ExpensePopup(onDismiss: () -> Unit) {
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
                 )
 
-                Spacer(modifier = Modifier.height(16.dp))
 
                 ExposedDropdownMenuBox(
                     expanded = expanded,
@@ -354,7 +357,6 @@ fun ExpensePopup(onDismiss: () -> Unit) {
                     }
                 }
 
-                Spacer(modifier = Modifier.height(16.dp))
 
                 OutlinedTextField(
                     value = expenseDescription,
@@ -377,7 +379,6 @@ fun ExpensePopup(onDismiss: () -> Unit) {
                     maxLines = 4
                 )
 
-                Spacer(modifier = Modifier.height(16.dp))
 
                 ExposedDropdownMenuBox(
                     expanded = expanded02,
@@ -443,6 +444,14 @@ fun ExpensePopup(onDismiss: () -> Unit) {
                     Button(
                         onClick = {
                             if (amount.isNotBlank() && expenseDescription.isNotBlank() && category.isNotBlank() && paymentMethod.isNotBlank()) {
+
+                                val cleanInput = amount.trim()
+                                val amountValue = cleanInput.toFloatOrNull()
+
+                                if (amountValue == null) {
+                                    Toast.makeText(context, "Please enter a valid number for Estimated Amount", Toast.LENGTH_LONG).show()
+                                    return@Button
+                                }
                                 CoroutineScope(Dispatchers.Main).launch {
                                     expenseViewModel.insertExpense(
                                         ExpenseEntity(

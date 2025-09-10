@@ -177,7 +177,11 @@ fun WishlistPopup(onDismiss: () -> Unit) {
 
                 OutlinedTextField(
                     value = estimatedAmount,
-                    onValueChange = { estimatedAmount = it },
+//                    onValueChange = { estimatedAmount = it },
+                    onValueChange = { input ->
+                        // Remove commas automatically as user types
+                        estimatedAmount = input.replace(",", "")
+                    },
                     label = { Text("Estimated Amount") },
                     modifier = Modifier.fillMaxWidth(),
                     colors = OutlinedTextFieldDefaults.colors(
@@ -339,6 +343,13 @@ fun WishlistPopup(onDismiss: () -> Unit) {
                     Button(
                         onClick = {
                             if (estimatedAmount.isNotBlank() && itemDescription.isNotBlank() && priority.isNotBlank() && itemName.isNotBlank()) {
+                                val cleanInput = estimatedAmount.trim()
+                                val amountValue = cleanInput.toFloatOrNull()
+
+                                if (amountValue == null) {
+                                    Toast.makeText(context, "Please enter a valid number for Estimated Amount", Toast.LENGTH_LONG).show()
+                                    return@Button
+                                }
 
                                 CoroutineScope(Dispatchers.Main).launch {
                                     wishlistViewModel.insertWish(

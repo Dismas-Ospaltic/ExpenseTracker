@@ -96,8 +96,8 @@ fun AnalyticsScreen(navController: NavController) {
         CardInfo("total Expenses This Month", "${currency.userCurrency} $totalMonthExpense", R.drawable.moneybag),
         CardInfo("Total Wishlist", "${currency.userCurrency} $wishlistTotal", R.drawable.expense),
         CardInfo("Number of Wishlist", "$totalNoWishlist", R.drawable.expense),
-        CardInfo("Total pending Wishlist", "$totalPendingWishList", R.drawable.expense),
-        CardInfo("Total Purchased Wishlist", "$totalPurchaseWishlist", R.drawable.expense)
+        CardInfo("Total pending Wishlist", "$totalPendingWishList", R.drawable.whishheart),
+        CardInfo("Total Purchased Wishlist", "$totalPurchaseWishlist", R.drawable.shopping)
     )
 
 
